@@ -1,0 +1,212 @@
+[
+    {
+        "id": 1,
+        "name": "Monkey D. Luffy",
+        "email": "luffy@onepiece.com",
+        "phone": "0811111111",
+        "loyalty": "Gold"
+    },
+    {
+        "id": 2,
+        "name": "Roronoa Zoro",
+        "email": "zoro@onepiece.com",
+        "phone": "0822222222",
+        "loyalty": "Silver"
+    },
+    {
+        "id": 3,
+        "name": "Nami",
+        "email": "nami@onepiece.com",
+        "phone": "0833333333",
+        "loyalty": "Gold"
+    },
+    {
+        "id": 4,
+        "name": "Usopp",
+        "email": "usopp@onepiece.com",
+        "phone": "0844444444",
+        "loyalty": "Bronze"
+    },
+    {
+        "id": 5,
+        "name": "Sanji",
+        "email": "sanji@onepiece.com",
+        "phone": "0855555555",
+        "loyalty": "Gold"
+    },
+    {
+        "id": 6,
+        "name": "Tony Tony Chopper",
+        "email": "chopper@onepiece.com",
+        "phone": "0866666666",
+        "loyalty": "Silver"
+    },
+    {
+        "id": 7,
+        "name": "Nico Robin",
+        "email": "robin@onepiece.com",
+        "phone": "0877777777",
+        "loyalty": "Gold"
+    },
+    {
+        "id": 8,
+        "name": "Franky",
+        "email": "franky@onepiece.com",
+        "phone": "0888888888",
+        "loyalty": "Bronze"
+    },
+    {
+        "id": 9,
+        "name": "Brook",
+        "email": "brook@onepiece.com",
+        "phone": "0899999999",
+        "loyalty": "Silver"
+    },
+    {
+        "id": 10,
+        "name": "Jinbe",
+        "email": "jinbe@onepiece.com",
+        "phone": "0810101010",
+        "loyalty": "Gold"
+    },
+    {
+        "id": 11,
+        "name": "Shanks",
+        "email": "shanks@onepiece.com",
+        "phone": "0811112222",
+        "loyalty": "Gold"
+    },
+    {
+        "id": 12,
+        "name": "Dracule Mihawk",
+        "email": "mihawk@onepiece.com",
+        "phone": "0812121212",
+        "loyalty": "Gold"
+    },
+    {
+        "id": 13,
+        "name": "Trafalgar Law",
+        "email": "law@onepiece.com",
+        "phone": "0813131313",
+        "loyalty": "Silver"
+    },
+    {
+        "id": 14,
+        "name": "Eustass Kid",
+        "email": "kid@onepiece.com",
+        "phone": "0814141414",
+        "loyalty": "Bronze"
+    },
+    {
+        "id": 15,
+        "name": "Boa Hancock",
+        "email": "hancock@onepiece.com",
+        "phone": "0815151515",
+        "loyalty": "Gold"
+    },
+    {
+        "id": 16,
+        "name": "Donquixote Doflamingo",
+        "email": "doflamingo@onepiece.com",
+        "phone": "0816161616",
+        "loyalty": "Silver"
+    },
+    {
+        "id": 17,
+        "name": "Portgas D. Ace",
+        "email": "ace@onepiece.com",
+        "phone": "0817171717",
+        "loyalty": "Gold"
+    },
+    {
+        "id": 18,
+        "name": "Sabo",
+        "email": "sabo@onepiece.com",
+        "phone": "0818181818",
+        "loyalty": "Silver"
+    },
+    {
+        "id": 19,
+        "name": "Kaido",
+        "email": "kaido@onepiece.com",
+        "phone": "0819191919",
+        "loyalty": "Gold"
+    },
+    {
+        "id": 20,
+        "name": "Big Mom",
+        "email": "bigmom@onepiece.com",
+        "phone": "0820202020",
+        "loyalty": "Gold"
+    },
+    {
+        "id": 21,
+        "name": "Blackbeard",
+        "email": "blackbeard@onepiece.com",
+        "phone": "0821212121",
+        "loyalty": "Bronze"
+    },
+    {
+        "id": 22,
+        "name": "Buggy",
+        "email": "buggy@onepiece.com",
+        "phone": "0822221212",
+        "loyalty": "Bronze"
+    },
+    {
+        "id": 23,
+        "name": "Smoker",
+        "email": "smoker@onepiece.com",
+        "phone": "0823232323",
+        "loyalty": "Silver"
+    },
+    {
+        "id": 24,
+        "name": "Tashigi",
+        "email": "tashigi@onepiece.com",
+        "phone": "0824242424",
+        "loyalty": "Bronze"
+    },
+    {
+        "id": 25,
+        "name": "Kizaru",
+        "email": "kizaru@onepiece.com",
+        "phone": "0825252525",
+        "loyalty": "Gold"
+    },
+    {
+        "id": 26,
+        "name": "Aokiji",
+        "email": "aokiji@onepiece.com",
+        "phone": "0826262626",
+        "loyalty": "Silver"
+    },
+    {
+        "id": 27,
+        "name": "Akainu",
+        "email": "akainu@onepiece.com",
+        "phone": "0827272727",
+        "loyalty": "Gold"
+    },
+    {
+        "id": 28,
+        "name": "Enel",
+        "email": "enel@onepiece.com",
+        "phone": "0828282828",
+        "loyalty": "Bronze"
+    },
+    {
+        "id": 29,
+        "name": "Crocodile",
+        "email": "crocodile@onepiece.com",
+        "phone": "0829292929",
+        "loyalty": "Silver"
+    },
+    {
+        "id": 30,
+        "name": "Rob Lucci",
+        "email": "lucci@onepiece.com",
+        "phone": "0830303030",
+        "loyalty": "Gold"
+    }
+]
