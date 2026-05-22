@@ -6,8 +6,8 @@
 }
 
 @font-face {
-    font-family: 'Poppins';
-    src: url('./public/fonts/Poppins-Regular.ttf');
+    font-family: 'Inter';
+    src: url('./public/fonts/Inter-Regular.ttf');
 }
 
 @theme {
@@ -22,11 +22,13 @@
     --color-merah: #ef4444; 
     --color-biru: #3b82f6;
     --color-kuning: #f59e0b;
+    --color-black: #000000;
     --color-dashboard1 : #90d5be;
     --color-dashboard2 : #E03F4F;
     --color-dashboard3 : #3B7597;
     --color-dashboard4 : #FFEF9F;
     --color-dashboard5 : #FF653F;
+    
 }
 
 body{

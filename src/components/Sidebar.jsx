@@ -1,171 +1,210 @@
-import { MdDashboard } from "react-icons/md";
-import { Link } from "react-router-dom";
+import {
+  MdDashboard,
+  MdOutlineInventory2,
+  MdOutlineSettings,
+} from "react-icons/md";
+
+import {
+  HiOutlineChartPie,
+  HiOutlineDocumentText,
+} from "react-icons/hi";
+
+import { FiMessageSquare } from "react-icons/fi";
+
 import { NavLink } from "react-router-dom";
 
 export default function Sidebar() {
+  const menus = [
+    {
+      title: "Dashboard",
+      path: "/",
+      icon: <MdDashboard size={20} />,
+    },
+    {
+      title: "Orders",
+      path: "/orders",
+      icon: <HiOutlineChartPie size={20} />,
+      badge: "20",
+    },
+    {
+      title: "Customer",
+      path: "/customers",
+      icon: <MdOutlineInventory2 size={20} />,
+    },
+    {
+      title: "Login",
+      path: "/login",
+      icon: <HiOutlineDocumentText size={20} />,
+    },
+  ];
+
+  const features = [
+    // {
+    //   title: "Help",
+    //   path: "/help",
+    //   icon: <FiMessageSquare size={20} />,
+    // },
+    // {
+    //   title: "Settings",
+    //   path: "/settings",
+    //   icon: <MdOutlineSettings size={20} />,
+    // },
+  ];
 
   const menuClass = ({ isActive }) =>
-    `flex cursor-pointer items-center rounded-xl p-4  space-x-2
-        ${isActive ?
-      "text-hijau bg-green-200 font-extrabold" :
-      "text-gray-600 hover:text-hijau hover:bg-green-200 hover:font-extrabold"
-    }`
+    `
+      group flex items-center justify-between
+      px-4 py-3 rounded-2xl
+      transition-all duration-300
+      border border-white/10
+      ${
+        isActive
+          ? `
+            bg-white/10
+            backdrop-blur-xl
+            shadow-[0_0_20px_rgba(255,255,255,0.05)]
+            text-white
+          `
+          : `
+            text-gray-400
+            hover:bg-white/5
+            hover:text-white
+          `
+      }
+    `;
 
   return (
-    <div
-      id="sidebar"
-      className="flex min-h-screen w-90 flex-col bg-white p-10 shadow-lg"
+    <aside
+      className="
+        w-[290px]
+        min-h-screen
+        bg-black
+        border-r border-white/10
+        px-5 py-6
+        flex flex-col
+      "
     >
-      {/* Logo */}
-      <div id="sidebar-logo" className="flex flex-col">
-        <span
-          id="logo-title"
-          className="font-poppins text-[48px] text-gray-900"
-        >
-          Indofood{" "}
-          <b id="logo-dot" className="text-hijau">
-            .
-          </b>
-        </span>
-        <span id="logo-subtitle" className="font-semibold text-gray-400">
-          Modern Admin Dashboard
-        </span>
-      </div>
-
-      {/* List Menu */}
-      <div id="sidebar-menu" className="mt-10">
-        <ul id="menu-list" className="space-y-3">
-          <li>
-            <NavLink
-              id="menu-1"
-              to="/"
-              className={menuClass}
-            ><MdDashboard className="mr-4 text-xl"></MdDashboard>
-              Dashboard
-            </NavLink>
-          </li>
-
-          <li>
-            <NavLink
-              id="menu-2"
-              to="/orders"
-              className={menuClass}
-            ><MdDashboard className="mr-4 text-xl"></MdDashboard>
-              Orders
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              id="menu-3"
-              to="/customers"
-              className={menuClass}
-            ><MdDashboard className="mr-4 text-xl"></MdDashboard>
-              Customer
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              id="menu-4"
-              to="/contact"
-              className={menuClass}
-            ><MdDashboard className="mr-4 text-xl"></MdDashboard>
-              Contact
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              id="menu-5"
-              to="/settings"
-              className={menuClass}
-            ><MdDashboard className="mr-4 text-xl"></MdDashboard>
-              Settings
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              id="menu-400"
-              to="/400"
-              className={menuClass}
-            ><MdDashboard className="mr-4 text-xl"></MdDashboard>
-              400
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              id="menu-401"
-              to="/401"
-              className={menuClass}
-            ><MdDashboard className="mr-4 text-xl"></MdDashboard>
-              401
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              id="menu-403"
-              to="/403"
-              className={menuClass}
-            ><MdDashboard className="mr-4 text-xl"></MdDashboard>
-              403
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              id="menu-403"
-              to="/login"
-              className={menuClass}
-            ><MdDashboard className="mr-4 text-xl"></MdDashboard>
-              Login
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              id="menu-403"
-              to="/register"
-              className={menuClass}
-            ><MdDashboard className="mr-4 text-xl"></MdDashboard>
-              Register
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              id="menu-403"
-              to="/forgot"
-              className={menuClass}
-            ><MdDashboard className="mr-4 text-xl"></MdDashboard>
-              Forgot
-            </NavLink>
-          </li>
-        </ul>
-      </div>
-
-      {/* Footer */}
-      <div id="sidebar-footer" className="mt-auto">
-        <div
-          id="footer-card"
-          className="bg-hijau px-4 py-2 rounded-md shadow-lg mb-10 flex items-center"
-        >
-          <div id="footer-text" className="text-white text-sm">
-            <span>Please organize your menus through button below!</span>
-            <div
-              id="add-menu-button"
-              className="flex justify-center items-center p-2 mt-3 bg-white rounded-md space-x-2"
-            >
-              <span className="text-gray-600 flex items-center">Add Menus</span>
-            </div>
-          </div>
-          <img
-            id="footer-avatar"
-            className="w-20 rounded-full"
-            src="/public/img/cooking.png"
-          />
+      {/* LOGO */}
+      <div className="flex items-center gap-3 mb-5 justify-center">
+        <div>
+          <h1 className="text-white text-xl font-semibold leading-none">
+            <img src="/public/img/logo-bengkel.png" alt="" />
+          </h1>
         </div>
-        <span id="footer-brand" className="font-bold text-gray-400">
-          Sedap Restaurant Admin Dashboard
-        </span>
-        <p id="footer-copyright" className="font-light text-gray-400">
-          &copy; 2025 All Right Reserved
-        </p>
       </div>
-    </div>
+
+      {/* SEARCH */}
+      <div
+        className="
+          mb-8
+          bg-white/5
+          border border-white/10
+          rounded-2xl
+          px-4 py-3
+          backdrop-blur-xl
+        "
+      >
+        <input
+          type="text"
+          placeholder="Search"
+          className="
+            bg-transparent
+            outline-none
+            text-sm
+            text-white
+            placeholder:text-gray-500
+            w-full
+          "
+        />
+      </div>
+
+      {/* MAIN MENU */}
+      <div className="space-y-2">
+        {menus.map((menu, index) => (
+          <NavLink
+            key={index}
+            to={menu.path}
+            className={menuClass}
+          >
+            <div className="flex items-center gap-3">
+              <span>{menu.icon}</span>
+              <span className="text-sm font-medium">
+                {menu.title}
+              </span>
+            </div>
+
+            {menu.badge && (
+              <div
+                className="
+                  w-6 h-6
+                  rounded-full
+                  bg-white
+                  text-black
+                  text-xs
+                  flex items-center justify-center
+                  font-semibold
+                "
+              >
+                {menu.badge}
+              </div>
+            )}
+          </NavLink>
+        ))}
+      </div>
+
+      {/* FEATURES */}
+      <div className="mt-10">
+        {/* <p
+          className="
+            text-xs
+            text-gray-500
+            uppercase
+            tracking-widest
+            mb-4
+            px-2
+          "
+        >
+          Features
+        </p> */}
+
+        <div className="space-y-2">
+          {features.map((menu, index) => (
+            <NavLink
+              key={index}
+              to={menu.path}
+              className={menuClass}
+            >
+              <div className="flex items-center gap-3">
+                <span>{menu.icon}</span>
+                <span className="text-sm font-medium">
+                  {menu.title}
+                </span>
+              </div>
+            </NavLink>
+          ))}
+        </div>
+      </div>
+
+      {/* FOOTER */}
+      <div className="mt-auto pt-10">
+        <div
+          className="
+            rounded-2xl
+            bg-white/5
+            border border-white/10
+            backdrop-blur-xl
+            p-4
+          "
+        >
+          <p className="text-white text-sm font-medium">
+            Bengkel Inventory System
+          </p>
+
+          <p className="text-gray-400 text-xs mt-1">
+            Modern inventory dashboard with glassmorphism UI.
+          </p>
+        </div>
+      </div>
+    </aside>
   );
 }

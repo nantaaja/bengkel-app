@@ -61,7 +61,7 @@ export default function Header() {
           <img
             id="profile-avatar"
             className="w-10 h-10 rounded-full"
-            src="/public/img/barcelona.png"
+            src="/public/img/cooking.png"
             className="w-10 h-10 rounded-full"
           />
         </div>
