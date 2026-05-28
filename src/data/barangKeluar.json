@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "tanggal": "25 Mei 2026",
+    "transaksi": "BK-250526-001",
+    "tujuan": "Servis Bebas",
+    "total": 6
+  },
+  {
+    "id": 2,
+    "tanggal": "25 Mei 2026",
+    "transaksi": "BK-250526-002",
+    "tujuan": "Servis Rutin",
+    "total": 4
+  },
+  {
+    "id": 3,
+    "tanggal": "25 Mei 2026",
+    "transaksi": "BK-250526-003",
+    "tujuan": "Servis Mesin",
+    "total": 7
+  },
+  {
+    "id": 4,
+    "tanggal": "25 Mei 2026",
+    "transaksi": "BK-250526-004",
+    "tujuan": "Servis Bebas",
+    "total": 2
+  },
+  {
+    "id": 5,
+    "tanggal": "25 Mei 2026",
+    "transaksi": "BK-250526-005",
+    "tujuan": "Servis Rutin",
+    "total": 5
+  }
+]

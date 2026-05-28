@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "name": "Oli Mesin Mrk abc",
+    "code": "OLI_001",
+    "stock": 1,
+    "minimum": 10,
+    "status": "Kritis",
+    "image": "/img/image 13.png"
+  },
+  {
+    "id": 2,
+    "name": "Kampas rem depan",
+    "code": "KRD_002",
+    "stock": 3,
+    "minimum": 10,
+    "status": "Kritis",
+    "image": "/img/image 14.png"
+  },
+  {
+    "id": 3,
+    "name": "Busi Mrk abc",
+    "code": "BUSI_003",
+    "stock": 1,
+    "minimum": 10,
+    "status": "Kritis",
+    "image": "/img/image 15.png"
+  }
+]

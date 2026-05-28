@@ -10,7 +10,7 @@ import "./assets/tailwind.css";
 
 import { FaHome } from "react-icons/fa";
 
-const PageHeader = React.lazy(() => import("./components/PageHeader"));
+// const PageHeader = React.lazy(() => import("./components/PageHeader"));
 const ErrorPage = React.lazy(() => import("./components/ErrorPage"));
 const Loading = React.lazy(() => import("./components/Loading"));
 
@@ -29,6 +29,9 @@ const Orders = React.lazy(() => import("./pages/Orders"));
 const Login = React.lazy(() => import("./pages/auth/Login"));
 const Register = React.lazy(() => import("./pages/auth/Register"));
 const Forgot = React.lazy(() => import("./pages/auth/Forgot"));
+
+const Sparepart = React.lazy(() => import("./pages/Sparepart"));
+
 function App() {
   return (
     <Suspense fallback={<Loading />}>
@@ -36,7 +39,7 @@ function App() {
         {/* Main Layout */}
         <Route element={<MainLayout />}>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/orders" element={<Orders />} />
+          <Route path="/orders" element={<Sparepart />} />
           <Route path="/customers" element={<Customers />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/401" element={<Unauthorized />} />

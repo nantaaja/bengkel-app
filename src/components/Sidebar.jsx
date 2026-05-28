@@ -1,15 +1,16 @@
-import {
-  MdDashboard,
-  MdOutlineInventory2,
-  MdOutlineSettings,
-} from "react-icons/md";
+import { MdDashboard, MdOutlineKeyboardArrowRight } from "react-icons/md";
+
+import { FiSearch } from "react-icons/fi";
 
 import {
-  HiOutlineChartPie,
-  HiOutlineDocumentText,
-} from "react-icons/hi";
-
-import { FiMessageSquare } from "react-icons/fi";
+  LuPackage,
+  LuBoxes,
+  LuArrowDownToLine,
+  LuArrowUpFromLine,
+  LuTruck,
+  LuFileText,
+  LuSettings,
+} from "react-icons/lu";
 
 import { NavLink } from "react-router-dom";
 
@@ -18,55 +19,63 @@ export default function Sidebar() {
     {
       title: "Dashboard",
       path: "/",
-      icon: <MdDashboard size={20} />,
+      icon: <MdDashboard size={18} />,
     },
     {
-      title: "Orders",
-      path: "/orders",
-      icon: <HiOutlineChartPie size={20} />,
-      badge: "20",
+      title: "Sparepart",
+      path: "/sparepart",
+      icon: <LuPackage size={18} />,
     },
     {
-      title: "Customer",
-      path: "/customers",
-      icon: <MdOutlineInventory2 size={20} />,
+      title: "Stok",
+      path: "/stok",
+      icon: <LuBoxes size={18} />,
     },
     {
-      title: "Login",
-      path: "/login",
-      icon: <HiOutlineDocumentText size={20} />,
+      title: "Barang Masuk",
+      path: "/barang-masuk",
+      icon: <LuArrowDownToLine size={18} />,
     },
-  ];
-
-  const features = [
-    // {
-    //   title: "Help",
-    //   path: "/help",
-    //   icon: <FiMessageSquare size={20} />,
-    // },
-    // {
-    //   title: "Settings",
-    //   path: "/settings",
-    //   icon: <MdOutlineSettings size={20} />,
-    // },
+    {
+      title: "Barang Keluar",
+      path: "/barang-keluar",
+      icon: <LuArrowUpFromLine size={18} />,
+    },
+    {
+      title: "Supplier",
+      path: "/supplier",
+      icon: <LuTruck size={18} />,
+    },
+    {
+      title: "Laporan",
+      path: "/laporan",
+      icon: <LuFileText size={18} />,
+    },
+    {
+      title: "Pengaturan",
+      path: "/pengaturan",
+      icon: <LuSettings size={18} />,
+    },
   ];
 
   const menuClass = ({ isActive }) =>
     `
-      group flex items-center justify-between
-      px-4 py-3 rounded-2xl
+      flex items-center justify-between
+      px-4 h-12
+      rounded-2xl
       transition-all duration-300
-      border border-white/10
+
       ${
         isActive
           ? `
             bg-white/10
-            backdrop-blur-xl
-            shadow-[0_0_20px_rgba(255,255,255,0.05)]
+            backdrop-blur-md
+            border border-white/10
+            shadow-lg
             text-white
           `
           : `
-            text-gray-400
+            text-zinc-400
             hover:bg-white/5
             hover:text-white
           `
@@ -74,135 +83,54 @@ export default function Sidebar() {
     `;
 
   return (
-    <aside
-      className="
-        w-[290px]
-        min-h-screen
-        bg-black
-        border-r border-white/10
-        px-5 py-6
-        flex flex-col
-      "
-    >
-      {/* LOGO */}
-      <div className="flex items-center gap-3 mb-5 justify-center">
-        <div>
-          <h1 className="text-white text-xl font-semibold leading-none">
-            <img src="/public/img/logo-bengkel.png" alt="" />
-          </h1>
+    <aside className="flex min-h-screen w-[290px] flex-col border-r bg-[#050505]">
+      <div className="px-6 pt-8 text-center">
+        <img src="/img/logo-bengkel.png" alt="logo" className="w-[220px] block mx-auto" />
+      </div>
+
+      <div className="mt-7 px-5">
+        <div className="flex h-12 items-center gap-3 rounded-2xl border border-white/10 bg-white/10 px-4 shadow-lg backdrop-blur-md">
+          <FiSearch className="text-zinc-400" />
+
+          <input
+            type="text"
+            placeholder="Search"
+            className="w-full bg-transparent text-sm text-white outline-none placeholder:text-zinc-400"
+          />
         </div>
       </div>
 
-      {/* SEARCH */}
-      <div
-        className="
-          mb-8
-          bg-white/5
-          border border-white/10
-          rounded-2xl
-          px-4 py-3
-          backdrop-blur-xl
-        "
-      >
-        <input
-          type="text"
-          placeholder="Search"
-          className="
-            bg-transparent
-            outline-none
-            text-sm
-            text-white
-            placeholder:text-gray-500
-            w-full
-          "
-        />
-      </div>
-
-      {/* MAIN MENU */}
-      <div className="space-y-2">
+      <div className="mt-8 space-y-2 px-4">
         {menus.map((menu, index) => (
-          <NavLink
-            key={index}
-            to={menu.path}
-            className={menuClass}
-          >
+          <NavLink key={index} to={menu.path} className={menuClass}>
             <div className="flex items-center gap-3">
-              <span>{menu.icon}</span>
-              <span className="text-sm font-medium">
-                {menu.title}
-              </span>
+              {menu.icon}
+
+              <span className="text-sm font-medium">{menu.title}</span>
             </div>
 
-            {menu.badge && (
-              <div
-                className="
-                  w-6 h-6
-                  rounded-full
-                  bg-white
-                  text-black
-                  text-xs
-                  flex items-center justify-center
-                  font-semibold
-                "
-              >
-                {menu.badge}
-              </div>
-            )}
+            <MdOutlineKeyboardArrowRight size={18} />
           </NavLink>
         ))}
       </div>
 
-      {/* FEATURES */}
-      <div className="mt-10">
-        {/* <p
-          className="
-            text-xs
-            text-gray-500
-            uppercase
-            tracking-widest
-            mb-4
-            px-2
-          "
-        >
-          Features
-        </p> */}
+      <div className="mt-auto">
+        <div className="relative h-[280px] overflow-hidden border border-white/10">
+          <img src="/img/image 11.png" alt="bengkel" className="absolute inset-0 h-full w-full object-cover" />
 
-        <div className="space-y-2">
-          {features.map((menu, index) => (
-            <NavLink
-              key={index}
-              to={menu.path}
-              className={menuClass}
-            >
-              <div className="flex items-center gap-3">
-                <span>{menu.icon}</span>
-                <span className="text-sm font-medium">
-                  {menu.title}
-                </span>
-              </div>
-            </NavLink>
-          ))}
-        </div>
-      </div>
+          <div className="absolute inset-0 bg-black/40" />
 
-      {/* FOOTER */}
-      <div className="mt-auto pt-10">
-        <div
-          className="
-            rounded-2xl
-            bg-white/5
-            border border-white/10
-            backdrop-blur-xl
-            p-4
-          "
-        >
-          <p className="text-white text-sm font-medium">
-            Bengkel Inventory System
-          </p>
+          <div className="absolute right-4 bottom-4 left-4 rounded-3xl border border-white/10 bg-white/10 p-5 shadow-xl backdrop-blur-md">
+            <h2 className="text-xl font-bold text-white">Bengkel Twin Motor</h2>
 
-          <p className="text-gray-400 text-xs mt-1">
-            Modern inventory dashboard with glassmorphism UI.
-          </p>
+            <p className="mt-1 text-sm text-zinc-200">Jl. Limbungan no. 69, Pekanbaru</p>
+
+            <div className="mt-4 space-y-2">
+              <p className="text-sm text-pink-300">📞 0896-5337-3859</p>
+
+              <p className="text-sm text-zinc-100">✉ twin@motor.com</p>
+            </div>
+          </div>
         </div>
       </div>
     </aside>

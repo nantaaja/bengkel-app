@@ -1,6 +1,6 @@
 import { useState } from "react";
 import customersData from "../data/customers.json";
-import PageHeader from "../components/PageHeader";
+// import PageHeader from "../components/PageHeader";
 
 export default function Customers() {
   const [customers, setCustomers] = useState(customersData);
@@ -41,7 +41,7 @@ export default function Customers() {
 
   return (
     <div>
-      <PageHeader
+      {/* <PageHeader
         title="Customers"
         breadcrumb={["Dashboard", "Customers"]}
       >
@@ -51,7 +51,7 @@ export default function Customers() {
         >
           Add Customer
         </button>
-      </PageHeader>
+      </PageHeader> */}
 
       {showForm && (
         <div className="bg-white p-4 rounded-lg shadow-md mb-4">

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ordersData from "../data/orders.json";
-import PageHeader from "../components/PageHeader";
 
 export default function Orders() {
   const [orders, setOrders] = useState(ordersData);
@@ -41,17 +40,6 @@ export default function Orders() {
 
   return (
     <div>
-      <PageHeader
-        title="Orders"
-        breadcrumb={["Dashboard", "Orders"]}
-      >
-        <button
-          onClick={() => setShowForm(true)}
-          className="bg-hijau text-white px-4 py-2 rounded-lg"
-        >
-          Add Order
-        </button>
-      </PageHeader>
 
       {showForm && (
         <div className="bg-white p-4 rounded-lg shadow-md mb-4">

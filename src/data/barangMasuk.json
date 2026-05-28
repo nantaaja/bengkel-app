@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "tanggal": "25 Mei 2026",
+    "transaksi": "BM-250526-001",
+    "supplier": "CV. Sumber Jaya",
+    "total": 10
+  },
+  {
+    "id": 2,
+    "tanggal": "25 Mei 2026",
+    "transaksi": "BM-250526-002",
+    "supplier": "PT. Makmur Jaya",
+    "total": 8
+  },
+  {
+    "id": 3,
+    "tanggal": "25 Mei 2026",
+    "transaksi": "BM-250526-003",
+    "supplier": "CV. Abadi Motor",
+    "total": 12
+  },
+  {
+    "id": 4,
+    "tanggal": "25 Mei 2026",
+    "transaksi": "BM-250526-004",
+    "supplier": "CV. Sumber Jaya",
+    "total": 6
+  },
+  {
+    "id": 5,
+    "tanggal": "25 Mei 2026",
+    "transaksi": "BM-250526-005",
+    "supplier": "PT. Sparepart Indo",
+    "total": 15
+  }
+]

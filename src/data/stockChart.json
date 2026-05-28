@@ -1,0 +1,14 @@
+[
+  { "month": "Jan", "total": 60 },
+  { "month": "Feb", "total": 40 },
+  { "month": "Mar", "total": 85 },
+  { "month": "Apr", "total": 30 },
+  { "month": "May", "total": 50 },
+  { "month": "Jun", "total": 65 },
+  { "month": "Jul", "total": 75 },
+  { "month": "Aug", "total": 35 },
+  { "month": "Sept", "total": 100 },
+  { "month": "Okt", "total": 45 },
+  { "month": "Nov", "total": 70 },
+  { "month": "Des", "total": 55 }
+]

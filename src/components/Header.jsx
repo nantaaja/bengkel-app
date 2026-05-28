@@ -1,71 +1,37 @@
-import { FaBell, FaSearch } from "react-icons/fa";
-import { FcAreaChart } from "react-icons/fc";
-import { SlSettings } from "react-icons/sl";
+import { FiHelpCircle, FiHeadphones, FiBell } from "react-icons/fi";
 
 export default function Header() {
   return (
-    <div
-      id="header-container"
-      className="flex justify-between items-center p-4"
-    >
-      {/* Search Bar */}
-      <div id="search-bar" className="relative w-full mr-5">
-        <input
-          id="search-input"
-          className="border border-gray-100 p-2 pr-10 bg-white w-full rounded-md outline-none"
-          type="text"
-          placeholder="Search Here..."
-        />
-        <FaSearch
-          id="search-icon"
-          className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-300"
-        />
+    <header className="flex h-[90px] items-center justify-between border-b border-white/10  px-8">
+      {/* LEFT */}
+      <div className="flex items-center gap-3">
+        <span className="text-lg text-zinc-400">TwinMotor</span>
+
+        <span className="text-zinc-600">&gt;</span>
+
+        <h1 className="text-lg font-semibold text-white">Dashboard</h1>
       </div>
 
-      {/* Icon & Profile Section */}
-      <div id="icons-container" className="flex items-center space-x-4">
-        {/* Icons */}
-        <div
-          id="notification-icon"
-          className="relative p-3 bg-blue-100 rounded-2xl text-blue-500 cursor-pointer"
-        >
-          <FaBell />
-          <span
-            id="notification-badge"
-            className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-blue-200 rounded-full px-2 py-1 text-xs"
-          >
-            50
-          </span>
-        </div>
-        <div
-          id="chart-icon"
-          className="p-3 bg-blue-100 rounded-2xl cursor-pointer"
-        >
-          <FcAreaChart />
-        </div>
-        <div
-          id="settings-icon"
-          className="p-3 bg-red-100 rounded-2xl text-red-500 cursor-pointer"
-        >
-          <SlSettings />
-        </div>
+      {/* RIGHT */}
+      <div className="flex items-center gap-3">
+        {/* ICON */}
+        <button className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/10 text-zinc-300 transition-all hover:text-white">
+          <FiHelpCircle size={18} />
+        </button>
 
-        {/* Profile Section */}
-        <div
-          id="profile-container"
-          className="flex items-center space-x-4 border-l pl-4 border-gray-300"
-        >
-          <span id="profile-text">
-            Hello, <b>Yusuf</b>
-          </span>
-          <img
-            id="profile-avatar"
-            className="w-10 h-10 rounded-full"
-            src="/public/img/cooking.png"
-            className="w-10 h-10 rounded-full"
-          />
-        </div>
+        {/* ICON */}
+        <button className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/10 text-zinc-300 transition-all hover:text-white">
+          <FiHeadphones size={18} />
+        </button>
+
+        {/* ICON */}
+        <button className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/10 text-zinc-300 transition-all hover:text-white">
+          <FiBell size={18} />
+        </button>
+
+        {/* PROFILE */}
+        <img src="/img/profile.png" alt="profile" className="ml-2 h-12 w-12 rounded-full object-cover" />
       </div>
-    </div>
+    </header>
   );
 }
