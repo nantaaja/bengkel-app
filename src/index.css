@@ -11,7 +11,7 @@
 }
 
 @theme {
-    --font-barlow: "Barlow", sans-serif;
+    --font-inter: "Inter", "Barlow", sans-serif;
     --font-poppins: "Poppins", sans-serif;
 
     --color-latar: #f3f4f6;
@@ -33,5 +33,6 @@
 }
 
 body{
-    @apply font-barlow;
+    font-family: var(--font-inter);
+    background-color: red;
 }
