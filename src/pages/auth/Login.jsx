@@ -194,7 +194,7 @@ export default function Login() {
 
           <div className="mt-10 text-center w-full">
             <p className="text-xs font-medium text-gray-500 tracking-wide">
-              © 2024 Bengkel Twin Motor. All rights reserved.
+              © 2026 Bengkel Twin Motor. All rights reserved.
             </p>
           </div>
         </div>

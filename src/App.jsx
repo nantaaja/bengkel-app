@@ -31,6 +31,11 @@ const Register = React.lazy(() => import("./pages/auth/Register"));
 const Forgot = React.lazy(() => import("./pages/auth/Forgot"));
 
 const Sparepart = React.lazy(() => import("./pages/Sparepart"));
+const Service = React.lazy(() => import("./pages/Service"));
+
+const TransactionHistory = React.lazy(() => import("./pages/TransactionHistory"));
+
+const Report = React.lazy(() => import("./pages/Report"));
 
 function App() {
   return (
@@ -39,7 +44,14 @@ function App() {
         {/* Main Layout */}
         <Route element={<MainLayout />}>
           <Route path="/" element={<Dashboard />} />
+          
           <Route path="/orders" element={<Sparepart />} />
+          <Route path="/pelayanan-service" element={<Service />} />
+          
+          <Route path="/riwayat-transaksi" element={<TransactionHistory />} />
+          
+          <Route path="/laporan" element={<Report />} />
+
           <Route path="/customers" element={<Customers />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/401" element={<Unauthorized />} />

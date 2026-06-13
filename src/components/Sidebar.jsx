@@ -10,6 +10,8 @@ import {
   LuTruck,
   LuFileText,
   LuSettings,
+  LuUsers,
+  LuHistory
 } from "react-icons/lu";
 
 import { NavLink } from "react-router-dom";
@@ -25,6 +27,11 @@ export default function Sidebar() {
       title: "Sparepart",
       path: "/sparepart",
       icon: <LuPackage size={18} />,
+    },
+    {
+      title: "Pelayanan Service",
+      path: "/pelayanan-service",
+      icon: <LuUsers size={18} />,
     },
     {
       title: "Stok",
@@ -45,6 +52,11 @@ export default function Sidebar() {
       title: "Supplier",
       path: "/supplier",
       icon: <LuTruck size={18} />,
+    },
+    {
+      title: "Riwayat Transaksi",
+      path: "/riwayat-transaksi",
+      icon: <LuHistory size={18} />,
     },
     {
       title: "Laporan",

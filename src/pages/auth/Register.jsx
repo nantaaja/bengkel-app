@@ -98,7 +98,7 @@ export default function Register() {
             <div className="mt-8 text-center text-sm text-gray-400">
               Sudah punya akun?{" "}
               <Link
-                to="/"
+                to="/login"
                 className="text-[#F24822] hover:opacity-80 font-bold transition-colors"
               >
                 Login di sini
@@ -108,7 +108,7 @@ export default function Register() {
 
           <div className="mt-10 text-center w-full">
             <p className="text-xs font-medium text-gray-500 tracking-wide">
-              © 2024 Bengkel Twin Motor. All rights reserved.
+              © 2026 Bengkel Twin Motor. All rights reserved.
             </p>
           </div>
         </div>
