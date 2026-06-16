@@ -2,7 +2,7 @@ import { LuPlus } from "react-icons/lu";
 
 export default function SparepartHeader({ onAdd }) {
   return (
-    <div className="mb-10 flex items-start justify-between">
+    <div className="mb-10 mt-5 flex items-start justify-between">
       <div>
         <h1 className="text-[48px] leading-none font-semibold tracking-tight text-white">Daftar Sparepart</h1>
 

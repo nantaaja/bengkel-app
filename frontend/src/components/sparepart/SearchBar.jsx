@@ -8,11 +8,11 @@ export default function SearchBar({ value, onChange, onClear }) {
 
       {/* Input */}
       <input
-        type="text"
+        type="text"   
         placeholder="Cari kode barang, nama barang, atau supplier..."
         value={value}
         onChange={onChange}
-        className="h-12 w-full rounded-2xl border border-white/10 bg-white/5 pr-14 pl-14 text-sm text-white placeholder:text-zinc-500 focus:border-orange-500 focus:outline-none"
+        className="h-12 w-1/2  rounded-2xl border border-white/10 bg-white/5 pr-14 pl-14 text-sm text-white placeholder:text-zinc-500 focus:border-orange-500 focus:outline-none"
       />
 
       {/* Clear Button */}

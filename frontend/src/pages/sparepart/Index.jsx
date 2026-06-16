@@ -103,7 +103,19 @@ export default function Index() {
   };
 
   return (
-    <div className="space-y-6">
+    <div
+      className="space-y-6   rounded-[28px] border border-white/10 p-6 shadow-[0_10px_40px_rgba(0,0,0,.25)] backdrop-blur-2xl"
+      style={{
+        background: `
+        radial-gradient(
+            circle at top,
+            rgba(255,255,255,.06) 0%,
+            rgba(255,255,255,.03) 40%,
+            rgba(255,255,255,.015) 100%
+        )
+        `,
+      }}
+    >
       <SparepartHeader onAdd={handleOpenCreate} />
 
       <SearchBar
