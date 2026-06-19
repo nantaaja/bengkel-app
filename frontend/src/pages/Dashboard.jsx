@@ -58,7 +58,7 @@ export default function Dashboard() {
 
                 {/* TEXT */}
                 <div>
-                  <h2 className="text-2xl font-semibold text-white">{item.title}</h2>
+                  <h2 className="text-2xl font-bold text-white">{item.title}</h2>
 
                   <h1 className="mt-2 text-6xl font-bold text-white">{item.total}</h1>
 

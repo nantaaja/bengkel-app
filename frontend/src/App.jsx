@@ -30,12 +30,13 @@ const Login = React.lazy(() => import("./pages/auth/Login"));
 const Register = React.lazy(() => import("./pages/auth/Register"));
 const Forgot = React.lazy(() => import("./pages/auth/Forgot"));
 
-const Sparepart = React.lazy(() => import("./pages/Sparepart"));
+// const Sparepart = React.lazy(() => import("./pages/Sparepart"));
 const Service = React.lazy(() => import("./pages/Service"));
 
 const TransactionHistory = React.lazy(() => import("./pages/TransactionHistory"));
 
 const Report = React.lazy(() => import("./pages/Report"));
+const Sparepart = React.lazy(() => import("./pages/sparepart/Index"));
 
 function App() {
   return (
@@ -52,6 +53,8 @@ function App() {
           
           <Route path="/laporan" element={<Report />} />
 
+          <Route path="/sparepart" element={<Sparepart />} />
+          <Route path="/orders" element={<Orders />} />
           <Route path="/customers" element={<Customers />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/401" element={<Unauthorized />} />

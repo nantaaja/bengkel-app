@@ -97,7 +97,7 @@ export default function Sidebar() {
   return (
     <aside className="flex min-h-screen w-[290px] flex-col border-r bg-[#050505]">
       <div className="px-6 pt-8 text-center">
-        <img src="/img/logo-bengkel.png" alt="logo" className="w-[220px] block mx-auto" />
+        <img src="/img/logo-bengkel.png" alt="logo" className="mx-auto block w-[220px]" />
       </div>
 
       <div className="mt-7 px-5">
