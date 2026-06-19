@@ -30,6 +30,12 @@ const Login = React.lazy(() => import("./pages/auth/Login"));
 const Register = React.lazy(() => import("./pages/auth/Register"));
 const Forgot = React.lazy(() => import("./pages/auth/Forgot"));
 
+// const Sparepart = React.lazy(() => import("./pages/Sparepart"));
+const Service = React.lazy(() => import("./pages/Service"));
+
+const TransactionHistory = React.lazy(() => import("./pages/TransactionHistory"));
+
+const Report = React.lazy(() => import("./pages/Report"));
 const Sparepart = React.lazy(() => import("./pages/sparepart/Index"));
 
 function App() {
@@ -39,6 +45,14 @@ function App() {
         {/* Main Layout */}
         <Route element={<MainLayout />}>
           <Route path="/" element={<Dashboard />} />
+          
+          <Route path="/orders" element={<Sparepart />} />
+          <Route path="/pelayanan-service" element={<Service />} />
+          
+          <Route path="/riwayat-transaksi" element={<TransactionHistory />} />
+          
+          <Route path="/laporan" element={<Report />} />
+
           <Route path="/sparepart" element={<Sparepart />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/customers" element={<Customers />} />
