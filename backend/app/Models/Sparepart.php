@@ -16,4 +16,9 @@ class Sparepart extends Model
         'persentase_jual',
         'harga_jual'
     ];
+
+    public function serviceSpareparts()
+    {
+        return $this->hasMany(ServiceSparepart::class);
+    }
 }
