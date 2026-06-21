@@ -1,32 +1,19 @@
-export default function PageHeader({ title, breadcrumb, children }) {
-    return (
-        <div className="flex items-center justify-between p-4 bg-red-600">
+import { LuChevronRight } from "react-icons/lu";
 
-            <div className="flex gap-5">
-                <span className="text-3xl font-semibold">
-                    {title} <span>&gt;</span>
-                </span>
-                
+export default function PageHeader({ breadcrumb = [], children }) {
+  return (
+    <div className="mb-2 flex items-center justify-between border-b border-white/10 pb-4">
+      <div className="flex items-center gap-2 text-sm text-zinc-400">
+        {breadcrumb.map((item, index) => (
+          <div key={index} className="flex items-center gap-2">
+            <span className={index === breadcrumb.length - 1 ? "font-medium text-white" : ""}>{item}</span>
 
-                <div className="flex items-center font-medium space-x-2 mt-2">
-                    {Array.isArray(breadcrumb) ? (
-                        breadcrumb.map((item, index) => (
-                            
-                            <span key={index} className="text-gray-500">
-                                {item} 
-                                {index < breadcrumb.length - 1 && " / "}
-                            </span>
-                        ))
-                    ) : (
-                        <span className="text-gray-500">{breadcrumb}</span>
-                    )}
-                </div>
-            </div>
+            {index < breadcrumb.length - 1 && <LuChevronRight size={16} />}
+          </div>
+        ))}
+      </div>
 
-            <div>
-                {children}
-            </div>
-
-        </div>
-    );
+      {children}
+    </div>
+  );
 }

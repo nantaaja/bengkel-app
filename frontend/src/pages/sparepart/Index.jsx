@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import Swal from "sweetalert2";
 
 import SparepartHeader from "../../components/sparepart/SparepartHeader";
 import SearchBar from "../../components/sparepart/SearchBar";
@@ -67,17 +68,63 @@ export default function Index() {
     setOpenForm(true);
   };
 
-  const handleOpenDelete = (item) => {
-    setSelectedSparepart(item);
-    setOpenDelete(true);
+  const handleOpenDelete = async (item) => {
+    const result = await Swal.fire({
+      title: "Hapus Sparepart?",
+      text: `Yakin ingin menghapus ${item.nama_barang}?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Ya, Hapus",
+      cancelButtonText: "Batal",
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#6b7280",
+    });
+
+    if (!result.isConfirmed) return;
+
+    try {
+      await sparepartService.delete(item.id);
+
+      Swal.fire({
+        icon: "success",
+        title: "Berhasil",
+        text: "Data berhasil dihapus.",
+        confirmButtonColor: "#ea580c",
+      });
+
+      loadSpareparts();
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: "Data gagal dihapus.",
+        confirmButtonColor: "#dc2626",
+      });
+
+      console.error(error);
+    }
   };
 
   const handleSubmit = async (formData) => {
     try {
       if (selectedSparepart) {
         await sparepartService.update(selectedSparepart.id, formData);
+
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil",
+          text: "Data sparepart berhasil diperbarui.",
+          confirmButtonColor: "#ea580c",
+        });
       } else {
         await sparepartService.create(formData);
+
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil",
+          text: "Data sparepart berhasil ditambahkan.",
+          confirmButtonColor: "#ea580c",
+        });
       }
 
       setOpenForm(false);
@@ -85,6 +132,13 @@ export default function Index() {
 
       loadSpareparts();
     } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: "Terjadi kesalahan saat menyimpan data.",
+        confirmButtonColor: "#dc2626",
+      });
+
       console.error(error);
     }
   };
@@ -104,7 +158,7 @@ export default function Index() {
 
   return (
     <div
-      className="space-y-6   rounded-[28px] border border-white/10 p-6 shadow-[0_10px_40px_rgba(0,0,0,.25)] backdrop-blur-2xl"
+      className="space-y-6 rounded-[28px] border border-white/10 p-6 shadow-[0_10px_40px_rgba(0,0,0,.25)] backdrop-blur-2xl"
       style={{
         background: `
         radial-gradient(
