@@ -34,26 +34,6 @@ export default function Sidebar() {
       icon: <LuUsers size={18} />,
     },
     {
-      title: "Stok",
-      path: "/stok",
-      icon: <LuBoxes size={18} />,
-    },
-    {
-      title: "Barang Masuk",
-      path: "/barang-masuk",
-      icon: <LuArrowDownToLine size={18} />,
-    },
-    {
-      title: "Barang Keluar",
-      path: "/barang-keluar",
-      icon: <LuArrowUpFromLine size={18} />,
-    },
-    {
-      title: "Supplier",
-      path: "/supplier",
-      icon: <LuTruck size={18} />,
-    },
-    {
       title: "Riwayat Transaksi",
       path: "/riwayat-transaksi",
       icon: <LuHistory size={18} />,

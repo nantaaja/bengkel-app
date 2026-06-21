@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 
 export default function ErrorPage({ code, message, image }) {
     return (
-        <div className="bg-teal-600 min-h-screen flex items-center justify-center p-6">
-            <div className="bg-teal-500 rounded-2xl w-full max-w-4xl py-16 px-6 text-center shadow-lg">
+        <div className="bg-gray-800 min-h-screen flex items-center justify-center p-6">
+            <div className="bg-gray-700 rounded-2xl w-full max-w-4xl py-16 px-6 text-center shadow-lg">
                 {image && (
                     <img
                         src={image}
@@ -19,7 +19,7 @@ export default function ErrorPage({ code, message, image }) {
                 </p>
                 <Link
                     to="/"
-                    className="bg-white text-teal-600 px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition"
+                    className="bg-white text-orange-600 px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition"
                 >
                     Kembali ke Dashboard
                 </Link>
