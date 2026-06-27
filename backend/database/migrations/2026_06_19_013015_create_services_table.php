@@ -33,7 +33,7 @@ return new class extends Migration
             $table->enum('status', [
                 'Belum dikerjakan',
                 'Sedang dikerjakan',
-                'Sudah selesai'
+                'Selesai'
             ])->default('Belum dikerjakan');
 
             $table->decimal('total_biaya', 12, 2)->default(0);

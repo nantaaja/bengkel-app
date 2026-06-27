@@ -1,22 +1,15 @@
-import { MdDashboard, MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { useState } from "react";
 
+import { MdDashboard, MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { FiSearch } from "react-icons/fi";
 
-import {
-  LuPackage,
-  LuBoxes,
-  LuArrowDownToLine,
-  LuArrowUpFromLine,
-  LuTruck,
-  LuFileText,
-  LuSettings,
-  LuUsers,
-  LuHistory
-} from "react-icons/lu";
+import { LuPackage, LuFileText, LuSettings, LuUsers, LuHistory } from "react-icons/lu";
 
 import { NavLink } from "react-router-dom";
 
 export default function Sidebar() {
+  const [search, setSearch] = useState("");
+
   const menus = [
     {
       title: "Dashboard",
@@ -50,6 +43,8 @@ export default function Sidebar() {
     },
   ];
 
+  const filteredMenus = menus.filter((menu) => menu.title.toLowerCase().includes(search.toLowerCase()));
+
   const menuClass = ({ isActive }) =>
     `
       flex items-center justify-between
@@ -76,36 +71,47 @@ export default function Sidebar() {
 
   return (
     <aside className="flex min-h-screen w-[290px] flex-col border-r bg-[#050505]">
+      {/* Logo */}
       <div className="px-6 pt-8 text-center">
-        <img src="/img/logo-bengkel.png" alt="logo" className="mx-auto block w-[220px]" />
+        <a href="/"><img src="/img/logo-bengkel.png" alt="logo" className="mx-auto block w-[220px]" /></a>
       </div>
 
+      {/* Search */}
       <div className="mt-7 px-5">
         <div className="flex h-12 items-center gap-3 rounded-2xl border border-white/10 bg-white/10 px-4 shadow-lg backdrop-blur-md">
           <FiSearch className="text-zinc-400" />
 
           <input
             type="text"
-            placeholder="Search"
+            placeholder="Cari Menu..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             className="w-full bg-transparent text-sm text-white outline-none placeholder:text-zinc-400"
           />
         </div>
       </div>
 
+      {/* Menu */}
       <div className="mt-8 space-y-2 px-4">
-        {menus.map((menu, index) => (
-          <NavLink key={index} to={menu.path} className={menuClass}>
-            <div className="flex items-center gap-3">
-              {menu.icon}
+        {filteredMenus.length > 0 ? (
+          filteredMenus.map((menu, index) => (
+            <NavLink key={index} to={menu.path} className={menuClass}>
+              <div className="flex items-center gap-3">
+                {menu.icon}
+                <span className="text-sm font-medium">{menu.title}</span>
+              </div>
 
-              <span className="text-sm font-medium">{menu.title}</span>
-            </div>
-
-            <MdOutlineKeyboardArrowRight size={18} />
-          </NavLink>
-        ))}
+              <MdOutlineKeyboardArrowRight size={18} />
+            </NavLink>
+          ))
+        ) : (
+          <div className="rounded-2xl border border-white/10 bg-white/5 py-5 text-center text-sm text-zinc-400">
+            Menu tidak ditemukan.
+          </div>
+        )}
       </div>
 
+      {/* Footer */}
       <div className="mt-auto">
         <div className="relative h-[280px] overflow-hidden border border-white/10">
           <img src="/img/image 11.png" alt="bengkel" className="absolute inset-0 h-full w-full object-cover" />

@@ -76,12 +76,12 @@ export default function Header() {
         </button>
 
         {/* ICON HEADPHONES */}
-        <button className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/10 text-zinc-300 transition-all hover:text-white">
+        <button className="flex h-11 w-11 hidden items-center justify-center rounded-xl border border-white/10 bg-white/10 text-zinc-300 transition-all hover:text-white">
           <FiHeadphones size={18} />
         </button>
 
         {/* ICON BELL */}
-        <button className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/10 text-zinc-300 transition-all hover:text-white">
+        <button className="flex h-11 w-11 hidden items-center justify-center rounded-xl border border-white/10 bg-white/10 text-zinc-300 transition-all hover:text-white">
           <FiBell size={18} />
         </button>
 

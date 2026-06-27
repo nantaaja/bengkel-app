@@ -15,7 +15,6 @@ const Orders = React.lazy(() => import("./pages/Orders"));
 const Sparepart = React.lazy(() => import("./pages/sparepart/Index"));
 const Service = React.lazy(() => import("./pages/service/Index"));
 
-const TransactionHistory = React.lazy(() => import("./pages/TransactionHistory"));
 const Report = React.lazy(() => import("./pages/Report"));
 
 const Login = React.lazy(() => import("./pages/auth/Login"));
@@ -26,6 +25,8 @@ const NotFound = React.lazy(() => import("./pages/NotFound"));
 const Unauthorized = React.lazy(() => import("./pages/Unauthorized"));
 const Forbidden = React.lazy(() => import("./pages/Forbidden"));
 const BadRequest = React.lazy(() => import("./pages/BadRequest"));
+
+const TransactionHistory = React.lazy(() => import("./pages/transaction/Index"));
 
 function App() {
   return (

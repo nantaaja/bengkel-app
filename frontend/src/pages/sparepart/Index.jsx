@@ -43,13 +43,19 @@ export default function Index() {
   }, []);
 
   const filteredSpareparts = useMemo(() => {
-    return spareparts.filter((item) => {
-      const keyword = search.toLowerCase();
+    const keyword = search.trim().toLowerCase();
 
+    return spareparts.filter((item) => {
       return (
-        item.kode_barang.toLowerCase().includes(keyword) ||
-        item.nama_barang.toLowerCase().includes(keyword) ||
-        item.supplier.toLowerCase().includes(keyword)
+        item.kode_barang?.toLowerCase().includes(keyword) ||
+        item.nama_barang?.toLowerCase().includes(keyword) ||
+        item.supplier?.toLowerCase().includes(keyword) ||
+        item.tanggal_masuk?.toLowerCase().includes(keyword) ||
+        item.status?.toLowerCase().includes(keyword) ||
+        String(item.stok).includes(keyword) ||
+        String(item.harga_modal).includes(keyword) ||
+        String(item.persentase_harga_jual).includes(keyword) ||
+        String(item.harga_jual).includes(keyword)
       );
     });
   }, [spareparts, search]);

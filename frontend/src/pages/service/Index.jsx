@@ -1,50 +1,44 @@
 import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 import api from "../../api/axios";
-
-import PageHeader from "../../components/PageHeader";
 
 import ServiceHeader from "../../components/service/ServiceHeader";
 import SearchBar from "../../components/service/SearchBar";
 import ServiceTable from "../../components/service/ServiceTable";
 import Pagination from "../../components/service/Pagination";
 import ServiceForm from "../../components/service/ServiceForm";
-import DeleteModal from "../../components/service/DeleteModal";
 
 export default function Index() {
-  // ==========================
-  // STATE
-  // ==========================
   const [services, setServices] = useState([]);
   const [serviceTypes, setServiceTypes] = useState([]);
   const [spareparts, setSpareparts] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const [search, setSearch] = useState("");
-  const filteredServices = services.filter((item) => {
+
+  const activeServices = services.filter((item) => item.status !== "Selesai");
+
+  const filteredServices = activeServices.filter((item) => {
     const keyword = search.trim().toLowerCase();
+    const tanggal = item.tanggal_servis ? new Date(item.tanggal_servis).toLocaleDateString("id-ID") : "";
 
     return (
       item.kode_servis?.toLowerCase().includes(keyword) ||
       item.nama_pelanggan?.toLowerCase().includes(keyword) ||
       item.nama_kendaraan?.toLowerCase().includes(keyword) ||
       item.plat_kendaraan?.toLowerCase().includes(keyword) ||
+      item.service_type?.nama_servis?.toLowerCase().includes(keyword) ||
       item.status?.toLowerCase().includes(keyword) ||
-      item.service_type?.nama_servis?.toLowerCase().includes(keyword)
+      item.tanggal_servis?.toLowerCase().includes(keyword) ||
+      tanggal.toLowerCase().includes(keyword)
     );
   });
 
   const [currentPage, setCurrentPage] = useState(1);
 
   const [openForm, setOpenForm] = useState(false);
-
   const [selectedService, setSelectedService] = useState(null);
-  const [openDelete, setOpenDelete] = useState(false);
-
-  // ==========================
-  // DUMMY DATA
-  // (Nanti diganti API)
-  // ==========================
 
   const fetchServices = async () => {
     try {
@@ -85,11 +79,21 @@ export default function Index() {
       if (selectedService) {
         await api.put(`/services/${selectedService.id}`, formData);
 
-        alert("Pelayanan berhasil diperbarui.");
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil",
+          text: "Pelayanan berhasil diperbarui.",
+          confirmButtonColor: "#ea580c",
+        });
       } else {
         await api.post("/services", formData);
 
-        alert("Pelayanan berhasil ditambahkan.");
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil",
+          text: "Pelayanan berhasil ditambahkan.",
+          confirmButtonColor: "#ea580c",
+        });
       }
 
       setOpenForm(false);
@@ -99,24 +103,49 @@ export default function Index() {
     } catch (error) {
       console.error(error);
 
-      alert("Gagal menyimpan pelayanan.");
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: "Gagal menyimpan pelayanan.",
+        confirmButtonColor: "#dc2626",
+      });
     }
   };
 
-  const handleDeleteService = async () => {
+  const handleDeleteService = async (item) => {
+    const result = await Swal.fire({
+      title: "Hapus Pelayanan?",
+      text: `Yakin ingin menghapus pelayanan ${item.kode_servis}?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Ya, Hapus",
+      cancelButtonText: "Batal",
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#6b7280",
+    });
+
+    if (!result.isConfirmed) return;
+
     try {
-      await api.delete(`/services/${selectedService.id}`);
+      await api.delete(`/services/${item.id}`);
 
-      alert("Pelayanan berhasil dihapus.");
-
-      setOpenDelete(false);
-      setSelectedService(null);
+      Swal.fire({
+        icon: "success",
+        title: "Berhasil",
+        text: "Data pelayanan berhasil dihapus.",
+        confirmButtonColor: "#ea580c",
+      });
 
       fetchServices();
     } catch (error) {
       console.error(error);
 
-      alert("Gagal menghapus pelayanan.");
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: "Data pelayanan gagal dihapus.",
+        confirmButtonColor: "#dc2626",
+      });
     }
   };
 
@@ -127,9 +156,19 @@ export default function Index() {
   }, []);
 
   return (
-    <div className="mt-5 space-y-6">
-      <PageHeader breadcrumb={["TwinMotor", "Pelayanan Servis"]} />
-
+    <div
+      className="space-y-6 rounded-[28px] border border-white/10 p-6 shadow-[0_10px_40px_rgba(0,0,0,.25)] backdrop-blur-2xl"
+      style={{
+        background: `
+        radial-gradient(
+          circle at top,
+          rgba(255,255,255,.06) 0%,
+          rgba(255,255,255,.03) 40%,
+          rgba(255,255,255,.015) 100%
+        )
+      `,
+      }}
+    >
       <ServiceHeader
         onAdd={() => {
           setSelectedService(null);
@@ -137,24 +176,34 @@ export default function Index() {
         }}
       />
 
-      <SearchBar value={search} onChange={(e) => setSearch(e.target.value)} />
-
-      <ServiceTable
-        services={filteredServices}
-        onDetail={() => {}}
-        onEdit={(item) => {
-          console.log(item);
-
-          setSelectedService(item);
-          setOpenForm(true);
+      <SearchBar
+        value={search}
+        onChange={(e) => {
+          setSearch(e.target.value);
+          setCurrentPage(1);
         }}
-        onDelete={(item) => {
-          setSelectedService(item);
-          setOpenDelete(true);
-        }}
+        onClear={() => setSearch("")}
       />
 
-      <Pagination currentPage={currentPage} totalPages={1} onPageChange={(page) => setCurrentPage(page)} />
+      {loading ? (
+        <div className="rounded-3xl border border-white/10 bg-white/5 py-20 text-center text-zinc-400">
+          Memuat data...
+        </div>
+      ) : (
+        <>
+          <ServiceTable
+            services={filteredServices}
+            onDetail={() => {}}
+            onEdit={(item) => {
+              setSelectedService(item);
+              setOpenForm(true);
+            }}
+            onDelete={handleDeleteService}
+          />
+
+          <Pagination currentPage={currentPage} totalPages={1} onPageChange={(page) => setCurrentPage(page)} />
+        </>
+      )}
 
       <ServiceForm
         open={openForm}
@@ -166,15 +215,6 @@ export default function Index() {
         initialData={selectedService}
         serviceTypes={serviceTypes}
         spareparts={spareparts}
-      />
-
-      <DeleteModal
-        open={openDelete}
-        onClose={() => {
-          setOpenDelete(false);
-          setSelectedService(null);
-        }}
-        onConfirm={handleDeleteService}
       />
     </div>
   );

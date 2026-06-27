@@ -1,6 +1,6 @@
 import { LuEye, LuPencil, LuTrash2 } from "react-icons/lu";
 
-export default function ServiceTable({ services, onDetail, onEdit, onDelete }) {
+export default function TransactionTable({ services, onDetail}) {
   const formatRupiah = (value) => {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
@@ -38,11 +38,11 @@ export default function ServiceTable({ services, onDetail, onEdit, onDelete }) {
   };
 
   return (
-    <div className="overflow-hidden rounded-[32px] border border-white/10 bg-[#262626]">
+    <div className="mt-6 overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md">
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[1180px]">
+        <table className="min-w-full">
           <thead className="border-b border-white/10 bg-white/5">
-            <tr className="text-sm text-zinc-400">
+            <tr className="text-sm font-medium text-zinc-400">
               <th className="px-6 py-5 text-left">No</th>
 
               <th className="px-6 py-5 text-left">No. Transaksi</th>
@@ -75,10 +75,7 @@ export default function ServiceTable({ services, onDetail, onEdit, onDelete }) {
                 const status = getStatus(item.status);
 
                 return (
-                  <tr
-                    key={item.id}
-                    className="border-b border-white/10 transition transition-all duration-300 hover:bg-white/5"
-                  >
+                  <tr key={item.id} className="border-b border-white/10 transition-all duration-300 hover:bg-white/5">
                     <td className="px-6 py-5 text-white">{index + 1}</td>
 
                     <td className="px-6 py-5 font-medium text-orange-400">{item.kode_servis}</td>
@@ -92,27 +89,22 @@ export default function ServiceTable({ services, onDetail, onEdit, onDelete }) {
                     <td className="px-6 py-5 text-zinc-300">{item.service_type?.nama_servis}</td>
 
                     <td className="px-6 py-5 text-center">
-                      <span className={`rounded-full px-3 py-1 text-xs font-medium ${status.color}`}>
+                      <span className={`inline-flex rounded-full px-3 py-1 text-xs font-medium ${status.color}`}>
                         {status.text}
                       </span>
                     </td>
 
-                    <td className="px-6 py-5 font-medium text-green-400">{formatRupiah(item.total_biaya)}</td>
+                    <td className="px-6 py-5 text-right font-medium text-green-400">
+                      {formatRupiah(item.total_biaya)}
+                    </td>
 
                     <td className="px-6 py-5">
-                      <div className="flex items-center justify-center gap-2">
+                      <div className="flex justify-center">
                         <button
-                          onClick={() => onEdit(item)}
-                          className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/20 text-blue-400 transition hover:bg-blue-500 hover:text-white"
+                          onClick={() => onDetail(item)}
+                          className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 text-white transition hover:bg-white/10"
                         >
-                          <LuPencil size={18} />
-                        </button>
-
-                        <button
-                          onClick={() => onDelete(item)}
-                          className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-500/20 text-red-400 transition hover:bg-red-500 hover:text-white"
-                        >
-                          <LuTrash2 size={18} />
+                          <LuEye size={18} />
                         </button>
                       </div>
                     </td>
