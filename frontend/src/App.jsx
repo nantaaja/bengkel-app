@@ -28,11 +28,14 @@ const BadRequest = React.lazy(() => import("./pages/BadRequest"));
 
 const TransactionHistory = React.lazy(() => import("./pages/transaction/Index"));
 
+const OwnerLayout   = React.lazy(() => import("./layouts/OwnerLayout"));
+const OwnerDashboard = React.lazy(() => import("./pages/owner/Dashboard"));
+
 function App() {
   return (
     <Suspense fallback={<Loading />}>
       <Routes>
-        {/* Main Layout */}
+        {/* Main Layout Admin*/}
         <Route element={<MainLayout />}>
           <Route path="/" element={<Dashboard />} />
 
@@ -55,6 +58,13 @@ function App() {
           <Route path="/403" element={<Forbidden />} />
 
           <Route path="*" element={<NotFound />} />
+        </Route>
+
+        {/* Main Layout Owner*/}
+        <Route element={<OwnerLayout />}>
+          <Route path="/owner" element={<OwnerDashboard />} />
+          <Route path="/owner/laporan" element={<div className="p-6 text-zinc-400">Halaman laporan harga jual (coming soon)</div>} />
+          <Route path="/owner/pengaturan" element={<NotFound />} />
         </Route>
 
         {/* Auth Layout */}
