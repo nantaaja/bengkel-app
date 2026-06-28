@@ -4,7 +4,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\SparepartController;
 use App\Http\Controllers\Api\ServiceTypeController;
 use App\Http\Controllers\Api\ServiceController;
+use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\LaporanController;
 
+Route::get('/dashboard', [DashboardController::class, 'index']);
+Route::get('/laporan', [LaporanController::class, 'index']);
 Route::apiResource('spareparts', SparepartController::class);
 Route::get('/service-types', [ServiceTypeController::class, 'index']);
 Route::get('/services', [ServiceController::class, 'index']);

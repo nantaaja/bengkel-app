@@ -1,110 +1,153 @@
-import { useState } from "react";
-import { 
-  LuSearch, 
-  LuRotateCcw, 
+import { useState, useEffect } from "react";
+import {
+  LuSearch,
+  LuRotateCcw,
   LuDownload,
   LuTrendingUp,
   LuDollarSign,
   LuLayers,
   LuChevronLeft,
   LuChevronRight,
-  LuPrinter
+  LuPrinter,
 } from "react-icons/lu";
 import { FiPieChart } from "react-icons/fi";
+import api from "../api/axios";
+
+const ITEMS_PER_PAGE = 10;
+const PIE_COLORS = ["#F24822", "#52525b", "#27272a", "#a1a1aa", "#3f3f46"];
 
 export default function Report() {
-  // 1. Data Master untuk Tabel
-  const [items] = useState([
-    { kode: "SP-001", nama: "Oli Mesin MPX 2 0.8L", merk: "AHM", hargaBeli: 42000, hargaJual: 52000, stok: 15 },
-    { kode: "SP-002", nama: "Kampas Rem Depan", merk: "Nissin", hargaBeli: 35000, hargaJual: 45000, stok: 22 },
-    { kode: "SP-003", nama: "V-Belt Kit", merk: "Honda Genuine", hargaBeli: 115000, hargaJual: 140000, stok: 8 },
-    { kode: "SP-004", nama: "Aki Kering GTZ5S", merk: "GS Astra", hargaBeli: 185000, hargaJual: 220000, stok: 12 },
-    { kode: "SP-005", nama: "Busi Standar CPR9EA-9", merk: "NGK", hargaBeli: 18000, hargaJual: 25000, stok: 40 },
-  ]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError]     = useState(null);
 
-  // 2. Dummy Data untuk Diagram Batang (Statistik Keuntungan Per Bulan)
-  const barChartData = [
-    { bulan: "Jan", nilai: 40 },
-    { bulan: "Feb", nilai: 65 },
-    { bulan: "Mar", nilai: 45 },
-    { bulan: "Apr", nilai: 80 },
-    { bulan: "Mei", nilai: 55 },
-    { bulan: "Jun", nilai: 90 },
-    { bulan: "Jul", nilai: 70 },
-  ];
+  const [stats, setStats]             = useState({ total_modal: 0, total_nilai_jual: 0, estimasi_profit: 0, total_jenis_sparepart: 0 });
+  const [barChart, setBarChart]       = useState([]);
+  const [supplierGroup, setSupplierGroup] = useState([]);
+  const [spareparts, setSpareparts]   = useState([]);
 
-  // Kalkulasi data statistik untuk kartu atas
-  const totalSparepart = items.length;
-  const totalModal = items.reduce((acc, item) => acc + (item.hargaBeli * item.stok), 0);
-  const totalEstimasiJual = items.reduce((acc, item) => acc + (item.hargaJual * item.stok), 0);
-  const estimasiProfit = totalEstimasiJual - totalModal;
+  const [search, setSearch]           = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // Fungsi Export CSV
+  useEffect(() => {
+    const fetchLaporan = async () => {
+      try {
+        setLoading(true);
+        const res = await api.get("/laporan");
+        const d   = res.data.data;
+        setStats(d.stats);
+        setBarChart(d.bar_chart);
+        setSupplierGroup(d.supplier_group);
+        setSpareparts(d.spareparts);
+      } catch (err) {
+        console.error(err);
+        setError("Gagal memuat laporan. Pastikan server backend berjalan.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchLaporan();
+  }, []);
+
+  // Filter & pagination tabel
+  const filtered = spareparts.filter((item) => {
+    const kw = search.trim().toLowerCase();
+    return (
+      item.kode?.toLowerCase().includes(kw) ||
+      item.nama?.toLowerCase().includes(kw) ||
+      item.supplier?.toLowerCase().includes(kw)
+    );
+  });
+
+  const totalPages  = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
+  const currentData = filtered.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  // Nilai max bar chart untuk skala
+  const maxBar = Math.max(...barChart.map((i) => i.nilai), 1);
+
+  // Export CSV dari data real
   const handleExportCSV = () => {
-    const headers = ["Kode", "Nama Sparepart", "Merk", "Harga Beli", "Harga Jual", "Stok", "Margin"];
-    const csvRows = items.map(item => [
-      item.kode, item.nama, item.merk, item.hargaBeli, item.hargaJual, item.stok, item.hargaJual - item.hargaBeli
-    ].map(field => `"${field}"`).join(","));
-
-    const csvContent = [headers.join(","), ...csvRows].join("\n");
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", `Laporan_Harga_${new Date().toISOString().split('T')[0]}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const headers = ["Kode", "Nama Sparepart", "Supplier", "Harga Modal", "Harga Jual", "Stok", "Margin", "Persentase"];
+    const rows = spareparts.map((item) => [
+      item.kode, item.nama, item.supplier,
+      item.harga_modal, item.harga_jual,
+      item.stok, item.profit, `${item.percentage}%`,
+    ].map((f) => `"${f}"`).join(","));
+    const csv  = [headers.join(","), ...rows].join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement("a");
+    a.href = url;
+    a.setAttribute("download", `Laporan_${new Date().toISOString().split("T")[0]}.csv`);
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   };
+
+  if (loading) return (
+    <div className="flex h-full items-center justify-center p-6">
+      <p className="text-zinc-400">Memuat data laporan...</p>
+    </div>
+  );
+
+  if (error) return (
+    <div className="flex h-full items-center justify-center p-6">
+      <p className="text-red-400">{error}</p>
+    </div>
+  );
 
   return (
     <div className="p-6">
-      {/* HEADER DASHBOARD */}
+      {/* HEADER */}
       <div className="mb-8 flex items-start justify-between">
         <div>
           <h1 className="text-4xl font-semibold text-white">Laporan Harga Jual</h1>
           <p className="mt-1 text-zinc-400">Analisis margin keuntungan, valuasi stok, dan ringkasan harga.</p>
         </div>
-
         <div className="flex items-center gap-4">
-          <button 
+          <button
             onClick={handleExportCSV}
             className="flex h-11 items-center gap-2 rounded-xl border border-white/10 bg-zinc-800 px-4 text-sm text-zinc-300 transition-colors hover:bg-zinc-700"
           >
             <LuDownload size={16} /> Export CSV
           </button>
-          <button className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/10 text-zinc-300">
+          <button
+            onClick={() => window.location.reload()}
+            className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/10 text-zinc-300"
+          >
             <LuRotateCcw size={20} />
           </button>
         </div>
       </div>
 
-      {/* 1. STATS CARDS GRID */}
+      {/* STAT CARDS */}
       <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
         <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-6">
           <div className="flex items-start gap-5">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-black shrink-0">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white text-black">
               <LuLayers size={24} />
             </div>
             <div>
               <h2 className="text-lg font-medium text-zinc-400">Total Modal Stok</h2>
               <h1 className="mt-2 text-3xl font-bold text-white">
-                Rp. {totalModal.toLocaleString("id-ID")}
+                Rp {stats.total_modal.toLocaleString("id-ID")}
               </h1>
-              <p className="mt-1 text-xs text-zinc-500">Dari total {totalSparepart} jenis sparepart</p>
+              <p className="mt-1 text-xs text-zinc-500">Dari {stats.total_jenis_sparepart} jenis sparepart</p>
             </div>
           </div>
         </div>
 
         <div className="overflow-hidden rounded-3xl border border-white/10 bg-[#F24822] p-6">
           <div className="flex items-start gap-5">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-black shrink-0">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white text-black">
               <LuTrendingUp size={24} />
             </div>
             <div>
               <h2 className="text-lg font-medium text-orange-100">Estimasi Keuntungan</h2>
               <h1 className="mt-2 text-3xl font-bold text-white">
-                Rp. {estimasiProfit.toLocaleString("id-ID")}
+                Rp {stats.estimasi_profit.toLocaleString("id-ID")}
               </h1>
               <p className="mt-1 text-xs text-orange-200">Jika seluruh stok terjual habis</p>
             </div>
@@ -113,13 +156,13 @@ export default function Report() {
 
         <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-6">
           <div className="flex items-start gap-5">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-black shrink-0">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white text-black">
               <LuDollarSign size={24} />
             </div>
             <div>
               <h2 className="text-lg font-medium text-zinc-400">Total Nilai Jual</h2>
               <h1 className="mt-2 text-3xl font-bold text-white">
-                Rp. {totalEstimasiJual.toLocaleString("id-ID")}
+                Rp {stats.total_nilai_jual.toLocaleString("id-ID")}
               </h1>
               <p className="mt-1 text-xs text-zinc-500">Akumulasi harga jual eceran</p>
             </div>
@@ -127,28 +170,23 @@ export default function Report() {
         </div>
       </div>
 
-      {/* 2. SECTION GRAFIK (DIAGRAM BATANG & PIE CHART) */}
+      {/* GRAFIK */}
       <div className="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-3">
-        
-        {/* WIDGET KIRI: Diagram Batang (Statistik Keuntungan) */}
+        {/* Bar Chart – Pendapatan Servis Per Bulan */}
         <div className="rounded-3xl border border-white/10 bg-white/5 p-6 lg:col-span-2">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-xl font-semibold text-white">Statistik Keuntungan</h2>
-            <button className="h-10 rounded-xl bg-white/10 px-4 text-sm text-zinc-300">Tahun Ini</button>
+          <div className="mb-8 flex items-center justify-between">
+            <h2 className="text-xl font-semibold text-white">Pendapatan Servis Per Bulan</h2>
+            <span className="text-sm text-zinc-400">{new Date().getFullYear()}</span>
           </div>
-
-          {/* Area Render Diagram Batang */}
-          <div className="flex h-[220px] items-end justify-between gap-4 mt-4">
-            {barChartData.map((item, index) => (
-              <div key={index} className="flex w-full flex-col items-center gap-3 group">
-                {/* Tooltip Angka yang muncul saat dihover */}
-                <span className="text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                  {item.nilai}%
+          <div className="flex h-[220px] items-end justify-between gap-2 mt-4">
+            {barChart.map((item, index) => (
+              <div key={index} className="group flex w-full flex-col items-center gap-2">
+                <span className="text-[10px] text-white opacity-0 transition-opacity group-hover:opacity-100">
+                  {item.nilai > 0 ? `Rp ${(item.nilai / 1000).toFixed(0)}K` : "0"}
                 </span>
-                {/* Bar (Batang) Grafik */}
                 <div
-                  style={{ height: `${item.nilai * 2}px` }}
-                  className="w-full max-w-[40px] rounded-t-lg bg-gradient-to-t from-zinc-800 to-[#F24822] transition-all duration-300 group-hover:from-zinc-700 group-hover:to-[#ff613d]"
+                  style={{ height: `${Math.round((item.nilai / maxBar) * 180)}px`, minHeight: item.nilai > 0 ? "4px" : "0px" }}
+                  className="w-full max-w-[40px] rounded-t-lg bg-gradient-to-t from-zinc-800 to-[#F24822] transition-all duration-300 group-hover:to-[#ff613d]"
                 />
                 <span className="text-xs font-medium text-zinc-400">{item.bulan}</span>
               </div>
@@ -156,72 +194,68 @@ export default function Report() {
           </div>
         </div>
 
-        {/* WIDGET KANAN: Pie Chart / Donut Chart (Ringkasan Brand) */}
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-6 flex flex-col">
+        {/* Pie Chart – Ringkasan Supplier */}
+        <div className="flex flex-col rounded-3xl border border-white/10 bg-white/5 p-6">
           <div className="mb-6 flex items-center gap-2 border-b border-white/10 pb-4">
             <FiPieChart className="text-[#F24822]" size={20} />
-            <h2 className="text-xl font-semibold text-white">Ringkasan Brand</h2>
+            <h2 className="text-xl font-semibold text-white">Ringkasan Supplier</h2>
           </div>
 
-          <div className="flex-1 flex items-center justify-center py-4">
-            {/* Visualisasi Donut Chart dengan CSS Conic Gradient */}
-            <div 
-              className="relative h-40 w-40 rounded-full flex items-center justify-center shadow-xl shadow-black/50" 
-              style={{ background: 'conic-gradient(#F24822 0% 45%, #52525b 45% 80%, #27272a 80% 100%)' }}
-            >
-              {/* Lubang di tengah agar berbentuk Donut */}
-              <div className="h-28 w-28 rounded-full bg-[#18181b] flex items-center justify-center flex-col shadow-inner">
-                <span className="text-2xl font-bold text-white">45%</span>
-                <span className="text-[10px] text-zinc-400">AHM</span>
+          {supplierGroup.length > 0 ? (
+            <>
+              <div className="flex flex-1 items-center justify-center py-4">
+                <div
+                  className="relative flex h-40 w-40 items-center justify-center rounded-full shadow-xl shadow-black/50"
+                  style={{
+                    background: `conic-gradient(${supplierGroup.reduce((acc, s, i) => {
+                      const prev = supplierGroup.slice(0, i).reduce((a, x) => a + x.persentase, 0);
+                      return acc + `${PIE_COLORS[i % PIE_COLORS.length]} ${prev}% ${prev + s.persentase}%, `;
+                    }, "").slice(0, -2)})`,
+                  }}
+                >
+                  <div className="flex h-28 w-28 flex-col items-center justify-center rounded-full bg-[#18181b] shadow-inner">
+                    <span className="text-2xl font-bold text-white">{supplierGroup[0]?.persentase ?? 0}%</span>
+                    <span className="text-[10px] text-zinc-400 text-center px-1">{supplierGroup[0]?.supplier ?? ""}</span>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-
-          {/* Legend / Keterangan Chart */}
-          <div className="mt-4 space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-[#F24822]"></div>
-                <span className="text-sm text-zinc-300">Astra Honda Motor</span>
+              <div className="mt-4 space-y-3">
+                {supplierGroup.map((s, i) => (
+                  <div key={i} className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="h-3 w-3 rounded-full" style={{ backgroundColor: PIE_COLORS[i % PIE_COLORS.length] }} />
+                      <span className="text-sm text-zinc-300 truncate max-w-[130px]">{s.supplier}</span>
+                    </div>
+                    <span className="text-sm font-semibold text-white">{s.persentase}%</span>
+                  </div>
+                ))}
               </div>
-              <span className="text-sm font-semibold text-white">45%</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-zinc-500"></div>
-                <span className="text-sm text-zinc-300">GS Astra</span>
-              </div>
-              <span className="text-sm font-semibold text-white">35%</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-zinc-800 border border-white/20"></div>
-                <span className="text-sm text-zinc-300">Lainnya</span>
-              </div>
-              <span className="text-sm font-semibold text-white">20%</span>
-            </div>
-          </div>
+            </>
+          ) : (
+            <p className="text-center text-sm text-zinc-500 mt-8">Belum ada data supplier.</p>
+          )}
         </div>
-
       </div>
 
-      {/* 3. SECTION TABEL: Rincian Pricing & Margin */}
+      {/* TABEL RINCIAN */}
       <div className="mt-5 rounded-3xl border border-white/10 bg-white/5 p-6">
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-xl font-semibold text-white">Rincian Pricing & Margin</h2>
           <div className="relative w-[280px]">
             <LuSearch className="absolute left-3 top-3 text-zinc-500" size={16} />
-            <input 
-              type="text" 
-              placeholder="Cari sparepart..." 
+            <input
+              type="text"
+              placeholder="Cari sparepart..."
+              value={search}
+              onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
               className="w-full rounded-xl border border-white/10 bg-white/5 py-2 pl-10 pr-4 text-sm text-white outline-none focus:border-[#F24822]"
             />
           </div>
         </div>
 
         <div className="w-full overflow-x-auto">
-          <table className="w-full text-left text-sm whitespace-nowrap">
-            <thead className="text-zinc-400 border-b border-white/10">
+          <table className="w-full whitespace-nowrap text-left text-sm">
+            <thead className="border-b border-white/10 text-zinc-400">
               <tr>
                 <th className="pb-4 pr-4 font-medium">No</th>
                 <th className="pb-4 pr-4 font-medium">Kode</th>
@@ -234,24 +268,30 @@ export default function Report() {
               </tr>
             </thead>
             <tbody className="divide-y divide-white/10">
-              {items.map((item, index) => {
-                const profit = item.hargaJual - item.hargaBeli;
-                const percentage = ((profit / item.hargaBeli) * 100).toFixed(0);
-                return (
-                  <tr key={index} className="text-zinc-300 hover:bg-white/[0.02]">
-                    <td className="py-4 pr-4 font-medium text-white">{index + 1}</td>
-                    <td className="py-4 pr-4 font-mono text-[#F24822] text-xs">{item.kode}</td>
+              {currentData.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="py-10 text-center text-zinc-500">
+                    {search ? "Sparepart tidak ditemukan." : "Belum ada data sparepart."}
+                  </td>
+                </tr>
+              ) : (
+                currentData.map((item, index) => (
+                  <tr key={item.id} className="text-zinc-300 hover:bg-white/[0.02]">
+                    <td className="py-4 pr-4 font-medium text-white">
+                      {(currentPage - 1) * ITEMS_PER_PAGE + index + 1}
+                    </td>
+                    <td className="py-4 pr-4 font-mono text-xs text-[#F24822]">{item.kode}</td>
                     <td className="py-4 pr-4 font-medium text-white">{item.nama}</td>
-                    <td className="py-4 pr-4">Rp {item.hargaBeli.toLocaleString("id-ID")}</td>
-                    <td className="py-4 pr-4 text-white font-medium">Rp {item.hargaJual.toLocaleString("id-ID")}</td>
+                    <td className="py-4 pr-4">Rp {item.harga_modal.toLocaleString("id-ID")}</td>
+                    <td className="py-4 pr-4 font-medium text-white">Rp {item.harga_jual.toLocaleString("id-ID")}</td>
                     <td className="py-4 pr-4 text-center">
-                      <span className={`px-2.5 py-1 rounded-md text-xs font-medium ${item.stok <= 10 ? 'bg-red-500/10 text-red-400 border border-red-500/20' : 'bg-zinc-800 text-zinc-300 border border-white/5'}`}>
+                      <span className={`rounded-md px-2.5 py-1 text-xs font-medium ${item.stok <= 10 ? "border border-red-500/20 bg-red-500/10 text-red-400" : "border border-white/5 bg-zinc-800 text-zinc-300"}`}>
                         {item.stok} Pcs
                       </span>
                     </td>
-                    <td className="py-4 pr-4 text-right text-green-400 font-semibold">
-                      Rp {profit.toLocaleString("id-ID")}{" "}
-                      <span className="text-xs text-zinc-500 font-normal ml-1">(+{percentage}%)</span>
+                    <td className="py-4 pr-4 text-right font-semibold text-green-400">
+                      Rp {item.profit.toLocaleString("id-ID")}{" "}
+                      <span className="ml-1 text-xs font-normal text-zinc-500">(+{item.percentage}%)</span>
                     </td>
                     <td className="py-4 text-center">
                       <button title="Cetak Label Harga" className="text-zinc-400 transition-colors hover:text-[#F24822]">
@@ -259,24 +299,31 @@ export default function Report() {
                       </button>
                     </td>
                   </tr>
-                );
-              })}
+                ))
+              )}
             </tbody>
           </table>
         </div>
 
         {/* PAGINATION */}
         <div className="mt-8 flex items-center justify-center gap-4 text-sm text-zinc-400">
-          <button className="flex items-center justify-center p-1 transition-colors hover:text-white">
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((p) => p - 1)}
+            className="flex items-center justify-center p-1 transition-colors hover:text-white disabled:opacity-40"
+          >
             <LuChevronLeft size={20} />
           </button>
-          <span className="font-medium">1/5 pages</span>
-          <button className="flex items-center justify-center p-1 transition-colors hover:text-white">
+          <span className="font-medium">{currentPage} / {totalPages} pages</span>
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage((p) => p + 1)}
+            className="flex items-center justify-center p-1 transition-colors hover:text-white disabled:opacity-40"
+          >
             <LuChevronRight size={20} />
           </button>
         </div>
       </div>
-
     </div>
   );
 }

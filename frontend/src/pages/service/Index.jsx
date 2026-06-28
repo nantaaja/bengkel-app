@@ -14,7 +14,7 @@ export default function Index() {
   const [serviceTypes, setServiceTypes] = useState([]);
   const [spareparts, setSpareparts] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  
   const [search, setSearch] = useState("");
 
   const activeServices = services.filter((item) => item.status !== "Selesai");
@@ -36,6 +36,12 @@ export default function Index() {
   });
 
   const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 10;
+  const totalPages = Math.max(1, Math.ceil(filteredServices.length / ITEMS_PER_PAGE));
+  const currentData = filteredServices.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   const [openForm, setOpenForm] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
@@ -154,6 +160,7 @@ export default function Index() {
     fetchServiceTypes();
     fetchSpareparts();
   }, []);
+  
 
   return (
     <div
@@ -192,7 +199,7 @@ export default function Index() {
       ) : (
         <>
           <ServiceTable
-            services={filteredServices}
+            services={currentData}
             onDetail={() => {}}
             onEdit={(item) => {
               setSelectedService(item);
@@ -201,7 +208,10 @@ export default function Index() {
             onDelete={handleDeleteService}
           />
 
-          <Pagination currentPage={currentPage} totalPages={1} onPageChange={(page) => setCurrentPage(page)} />
+          <Pagination 
+            currentPage={currentPage} 
+            totalPages={totalPages} 
+            onPageChange={(page) => setCurrentPage(page)} />
         </>
       )}
 
