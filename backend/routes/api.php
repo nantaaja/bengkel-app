@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\LaporanController;
 use App\Http\Controllers\Api\LaporanOwnerController;
 use App\Http\Controllers\Api\AuthController;
+use Illuminate\Http\Request;
 
 // Route::get('/dashboard', [DashboardController::class, 'index']);
 // Route::get('/laporan', [LaporanController::class, 'index']);
@@ -33,4 +34,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/services/{id}', [ServiceController::class, 'update']);
     Route::delete('/services/{id}', [ServiceController::class, 'destroy']);
     Route::get('/owner/laporan', [LaporanOwnerController::class, 'index']);
-});
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+    });
