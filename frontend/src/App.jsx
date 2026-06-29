@@ -28,42 +28,50 @@ const BadRequest = React.lazy(() => import("./pages/BadRequest"));
 
 const TransactionHistory = React.lazy(() => import("./pages/transaction/Index"));
 
-const OwnerLayout   = React.lazy(() => import("./layouts/OwnerLayout"));
+const OwnerLayout = React.lazy(() => import("./layouts/OwnerLayout"));
 const OwnerDashboard = React.lazy(() => import("./pages/owner/Dashboard"));
+
+
+const ProtectedRoute = React.lazy(() => import("./components/ProtectedRoute"));
 
 function App() {
   return (
     <Suspense fallback={<Loading />}>
       <Routes>
-        {/* Main Layout Admin*/}
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<Dashboard />} />
+        <Route element={<ProtectedRoute />}>
+          {/* Main Layout Admin*/}
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<Dashboard />} />
 
-          <Route path="/sparepart" element={<Sparepart />} />
+            <Route path="/sparepart" element={<Sparepart />} />
 
-          <Route path="/pelayanan-service" element={<Service />} />
+            <Route path="/pelayanan-service" element={<Service />} />
 
-          <Route path="/riwayat-transaksi" element={<TransactionHistory />} />
+            <Route path="/riwayat-transaksi" element={<TransactionHistory />} />
 
-          <Route path="/laporan" element={<Report />} />
+            <Route path="/laporan" element={<Report />} />
 
-          <Route path="/orders" element={<Orders />} />
+            <Route path="/orders" element={<Orders />} />
 
-          <Route path="/customers" element={<Customers />} />
+            <Route path="/customers" element={<Customers />} />
 
-          <Route path="/400" element={<BadRequest />} />
+            <Route path="/400" element={<BadRequest />} />
 
-          <Route path="/401" element={<Unauthorized />} />
+            <Route path="/401" element={<Unauthorized />} />
 
-          <Route path="/403" element={<Forbidden />} />
+            <Route path="/403" element={<Forbidden />} />
 
-          <Route path="*" element={<NotFound />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
         </Route>
 
         {/* Main Layout Owner*/}
         <Route element={<OwnerLayout />}>
           <Route path="/owner" element={<OwnerDashboard />} />
-          <Route path="/owner/laporan" element={<div className="p-6 text-zinc-400">Halaman laporan harga jual (coming soon)</div>} />
+          <Route
+            path="/owner/laporan"
+            element={<div className="p-6 text-zinc-400">Halaman laporan harga jual (coming soon)</div>}
+          />
           <Route path="/owner/pengaturan" element={<NotFound />} />
         </Route>
 

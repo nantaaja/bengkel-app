@@ -4,6 +4,9 @@ import axios from "axios";
 
 import { BsFillExclamationDiamondFill } from "react-icons/bs";
 import { ImSpinner2 } from "react-icons/im";
+import { FcGoogle } from "react-icons/fc"; // Import icon Google
+import { useGoogleLogin } from '@react-oauth/google'; // Import hooks Google Login
+import api from "../../api/axios";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -25,7 +28,7 @@ export default function Login() {
     });
   };
 
-  /* process login */
+  /* process manual login */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -55,6 +58,34 @@ export default function Login() {
         setLoading(false);
       });
   };
+
+  /* process Google login */
+const loginWithGoogle = useGoogleLogin({
+  onSuccess: async (codeResponse) => {
+    setLoading(true);
+    try {
+      // Pastikan import 'api' dari '../../api/axios' sudah benar di atas
+      const res = await api.post("/auth/google", {
+        access_token: codeResponse.access_token,
+      });
+
+      if (res.status === 200) {
+        localStorage.setItem("ACCESS_TOKEN", res.data.access_token);
+        // Arahkan ke dashboard
+        window.location.href = "/";
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Login Gagal: " + (err.response?.data?.message || "Terjadi kesalahan"));
+    } finally {
+      setLoading(false);
+    }
+  },
+  onError: (error) => {
+    console.log("Login Failed:", error);
+    alert("Login Google dibatalkan");
+  },
+});
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-black p-4 sm:p-8 font-sans">
@@ -180,6 +211,23 @@ export default function Login() {
                 )}
               </button>
             </form>
+
+            {/* Tambahan Pembatas dan Tombol Google */}
+            <div className="flex items-center my-6">
+              <div className="flex-grow border-t border-[#444]"></div>
+              <span className="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Atau masuk dengan</span>
+              <div className="flex-grow border-t border-[#444]"></div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => loginWithGoogle()}
+              disabled={loading}
+              className="w-full flex items-center justify-center gap-3 bg-white text-gray-800 font-bold py-3.5 px-4 rounded-xl hover:bg-gray-200 active:bg-gray-300 transition-all duration-200 shadow-sm disabled:opacity-70 disabled:cursor-not-allowed text-sm"
+            >
+              <FcGoogle className="text-xl" />
+              Sign in with Google
+            </button>
 
             <div className="mt-8 text-center text-sm text-gray-400">
               Belum punya akun?{" "}
