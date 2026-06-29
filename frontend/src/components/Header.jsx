@@ -1,19 +1,39 @@
 import { useState, useEffect, useRef } from "react";
 import { FiHelpCircle, FiHeadphones, FiBell, FiLogOut } from "react-icons/fi";
 import { useNavigate, useLocation } from "react-router-dom"; 
+import api from "../api/axios"; // Pastikan path import axios ini sesuai struktur project kamu
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState(null);
   const dropdownRef = useRef(null);
   
   const navigate = useNavigate();
   const location = useLocation(); 
 
+  // 1. Fetch data user dari backend saat komponen dimuat
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await api.get("/user");
+        setUser(response.data);
+      } catch (error) {
+        console.error("Gagal mengambil data user profil:", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  // 2. Fungsi Logout membersihkan token sesi
   const handleLogout = () => {
     setIsOpen(false);
+    localStorage.removeItem("ACCESS_TOKEN"); // Hapus token dari browser
+    localStorage.removeItem("USER_EMAIL");
     navigate("/login"); 
   };
 
+  // 3. Menutup dropdown jika klik di luar komponen
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -24,6 +44,14 @@ export default function Header() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // 4. Logika penentuan Role dinamis berdasarkan email backend
+  const getRole = (email) => {
+    if (!email) return "Staff";
+    // Sesuaikan email owner dengan yang kamu daftarkan di AuthController.php
+    if (email === "twinmotorowner@gmail.com") return "Owner";
+    return "Admin";
+  };
+
   const pathnames = location.pathname.split("/").filter((x) => x);
 
   const formatBreadcrumb = (string) => {
@@ -32,6 +60,11 @@ export default function Header() {
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
   };
+
+  // Generate URL avatar otomatis berdasarkan nama user agar desainnya rapi dan konsisten
+  const avatarUrl = user 
+    ? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=ea580c&color=fff&bold=true`
+    : "/img/profile.png";
 
   return (
     <header className="flex h-[90px] items-center justify-between border-b border-white/10 px-8">
@@ -91,22 +124,45 @@ export default function Header() {
             onClick={() => setIsOpen(!isOpen)}
             className="block overflow-hidden rounded-full border-2 border-transparent transition-all hover:border-orange-500 focus:outline-none"
           >
-            <img src="/img/profile.png" alt="profile" className="h-12 w-12 object-cover" />
+            <img 
+              src={avatarUrl} 
+              alt="profile" 
+              className="h-12 w-12 rounded-full object-cover" 
+            />
           </button>
 
           {/* Dropdown Menu */}
           {isOpen && (
             <div className="absolute right-0 mt-3 w-72 origin-top-right rounded-2xl border border-white/10 bg-zinc-900 p-5 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none z-50 transform opacity-100 scale-100 transition-all">
               <div className="flex flex-col items-center text-center">
-                <img src="/img/profile.png" alt="profile large" className="h-20 w-20 rounded-full border-2 border-zinc-700 object-cover mb-3" />
-                <h2 className="text-base font-semibold text-white">Admin 01</h2>
-                <p className="text-xs text-zinc-400 mt-0.5">Admin@bengkeltwinmotor.com</p>
+                <img 
+                  src={avatarUrl} 
+                  alt="profile large" 
+                  className="h-20 w-20 rounded-full border-2 border-zinc-700 object-cover mb-3" 
+                />
+                
+                {/* Menampilkan nama dinamis */}
+                <h2 className="text-base font-semibold text-white">
+                  {user ? user.name : "Memuat..."}
+                </h2>
+                
+                {/* Menampilkan email dinamis */}
+                <p className="text-xs text-zinc-400 mt-0.5">
+                  {user ? user.email : "memuat..."}
+                </p>
+                
+                {/* Menampilkan role dinamis */}
                 <span className="mt-3 inline-block rounded-full bg-zinc-800 px-3 py-1 text-xs font-medium text-zinc-300 border border-white/5">
-                  Admin
+                  {user ? getRole(user.email) : "Loading"}
                 </span>
               </div>
+              
               <hr className="my-4 border-white/10" />
-              <button onClick={handleLogout} className="flex w-full items-center justify-center gap-2 rounded-xl border border-red-500/30 bg-transparent py-2.5 text-sm font-semibold text-red-400 transition-all hover:bg-red-500 hover:text-white">
+              
+              <button 
+                onClick={handleLogout} 
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-red-500/30 bg-transparent py-2.5 text-sm font-semibold text-red-400 transition-all hover:bg-red-500 hover:text-white"
+              >
                 <FiLogOut size={16} />
                 Logout
               </button>

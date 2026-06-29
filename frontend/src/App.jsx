@@ -30,6 +30,7 @@ const TransactionHistory = React.lazy(() => import("./pages/transaction/Index"))
 
 const OwnerLayout = React.lazy(() => import("./layouts/OwnerLayout"));
 const OwnerDashboard = React.lazy(() => import("./pages/owner/Dashboard"));
+const OwnerRoute = React.lazy(() => import("./components/OwnerRoute"));
 
 
 const ProtectedRoute = React.lazy(() => import("./components/ProtectedRoute"));
