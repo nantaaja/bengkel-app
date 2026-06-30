@@ -22,11 +22,14 @@ export default function Login() {
         if (res.status === 200) {
           localStorage.setItem("ACCESS_TOKEN", res.data.access_token);
           localStorage.setItem("USER_EMAIL", res.data.user.email);
-          
-          if (res.data.user.email === "twinmotorowner@gmail.com") {
-            window.location.href = "/owner"; // Owner diarahkan ke dashboard pemilih
+          // 1. Simpan ROLE dari backend ke localStorage
+          localStorage.setItem("USER_ROLE", res.data.user.role);
+
+          // 2. Redirect berdasarkan ROLE, bukan email lagi
+          if (res.data.user.role === "Owner") {
+            window.location.href = "/owner";
           } else {
-            window.location.href = "/"; // Admin diarahkan ke dashboard biasa
+            window.location.href = "/";
           }
         }
       } catch (err) {

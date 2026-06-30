@@ -31,16 +31,6 @@ export default function Sidebar() {
       path: "/riwayat-transaksi",
       icon: <LuHistory size={18} />,
     },
-    {
-      title: "Laporan",
-      path: "/laporan",
-      icon: <LuFileText size={18} />,
-    },
-    {
-      title: "Pengaturan",
-      path: "/pengaturan",
-      icon: <LuSettings size={18} />,
-    },
   ];
 
   const filteredMenus = menus.filter((menu) => menu.title.toLowerCase().includes(search.toLowerCase()));

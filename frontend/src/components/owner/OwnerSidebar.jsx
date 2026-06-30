@@ -1,11 +1,11 @@
 import { MdDashboard, MdOutlineKeyboardArrowRight } from "react-icons/md";
-import { LuFileText, LuSettings } from "react-icons/lu";
+import { LuFileText, LuUsers } from "react-icons/lu";
 import { NavLink } from "react-router-dom";
 
 const menus = [
   { title: "Dashboard",        path: "/owner",          icon: <MdDashboard size={18} /> },
   { title: "Laporan Harga Jual", path: "/owner/laporan", icon: <LuFileText size={18} /> },
-  { title: "Pengaturan",       path: "/owner/pengaturan", icon: <LuSettings size={18} /> },
+  { title: "Manajemen Karyawan", path: "/owner/users",   icon: <LuUsers size={18} /> },
 ];
 
 const menuClass = ({ isActive }) =>
