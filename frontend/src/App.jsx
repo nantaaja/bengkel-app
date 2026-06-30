@@ -63,6 +63,8 @@ function App() {
         {/* Auth Layout */}
         <Route element={<AuthLayout />}>
           <Route path="/login" element={<Login />} />
+          {/* <Route path="/register" element={<Register />} />
+          <Route path="/forgot" element={<Forgot />} /> */}
         </Route>
 
         <Route path="/400" element={<BadRequest />} />
