@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\LaporanController;
 use App\Http\Controllers\Api\LaporanOwnerController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 
 // Route::get('/dashboard', [DashboardController::class, 'index']);
@@ -37,4 +38,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+    Route::get('/laporan-owner', [LaporanOwnerController::class, 'index']);
+    Route::apiResource('users', UserController::class);
     });

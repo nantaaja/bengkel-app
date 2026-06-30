@@ -17,10 +17,10 @@ class AuthController extends Controller
         try {
             $token = $request->access_token;
             
-            // 1. Bypass SSL untuk environment localhost (Laragon)
+            // 1. Bypass SSL untuk environment localhost
             $guzzleClient = new Client(['verify' => false]);
             
-            // 2. Ambil data user dari Google menggunakan token dari React
+            // 2. Ambil data user dari Google
             $googleUser = Socialite::driver('google')
                 ->stateless()
                 ->setHttpClient($guzzleClient)
@@ -28,34 +28,26 @@ class AuthController extends Controller
 
             $googleEmail = $googleUser->getEmail();
 
-            // 3. DAFTAR EMAIL YANG DIIZINKAN MASUK BENGKEL APP
-            // Silakan ganti dengan email asli admin dan owner
-            $allowedEmails = [
-                'twinmotoradmin@gmail.com',  // Ganti dengan email Admin
-                'twinmotorowner@gmail.com'   // Ganti dengan email Bos/Owner
-            ];
+            // 3. VALIDASI DINAMIS: Cek apakah email ada di database
+            // Jika tidak ada, berarti user tidak terdaftar oleh Owner
+            $user = User::where('email', $googleEmail)->first();
 
-            // 4. Cek apakah email yang login ada di dalam daftar izinkan
-            if (!in_array($googleEmail, $allowedEmails)) {
+            if (!$user) {
                 return response()->json([
-                    'message' => 'Akses ditolak. Email Anda tidak terdaftar sebagai staf bengkel!'
+                    'message' => 'Akses ditolak. Email tidak terdaftar sebagai staf bengkel. Silakan hubungi Pemilik Bengkel.'
                 ], 403)->header('Access-Control-Allow-Origin', '*'); 
             }
 
-            // 5. Jika lolos pengecekan email, daftarkan atau ambil data user di database
-            $user = User::firstOrCreate(
-                ['email' => $googleEmail],
-                [
-                    'name' => $googleUser->getName(),
-                    'google_id' => $googleUser->getId(),
-                    'password' => null, // Dikosongkan karena login via Google
-                ]
-            );
+            // 4. Update data user (opsional, jika nama di Google berubah)
+            $user->update([
+                'name' => $googleUser->getName(),
+                'google_id' => $googleUser->getId(),
+            ]);
 
-            // 6. Buatkan Token Akses Sanctum untuk menjaga sesi user
+            // 5. Buatkan Token Akses Sanctum
             $authToken = $user->createToken('auth_token')->plainTextToken;
 
-            // 7. Kembalikan response sukses ke React
+            // 6. Kembalikan response sukses (User object sekarang sudah termasuk kolom 'role')
             return response()->json([
                 'message' => 'Login berhasil',
                 'access_token' => $authToken,
@@ -63,10 +55,8 @@ class AuthController extends Controller
             ], 200)->header('Access-Control-Allow-Origin', '*');
 
         } catch (Exception $e) {
-            // Jika ada sistem yang error (misal token expired/database mati), catat di laravel.log
             Log::error('Google Login Error: ' . $e->getMessage());
             
-            // Kembalikan response gagal ke React
             return response()->json([
                 'message' => 'Gagal login dengan Google', 
                 'error' => $e->getMessage()
