@@ -55,11 +55,6 @@ class UserController extends Controller
         ]);
 
         return response()->json(['message' => 'Data user berhasil diperbarui', 'data' => $user]);
-
-        // Tambahan validasi di UserController.php (Opsional tapi sangat disarankan)
-        if ($request->role === 'Owner' && $user->role !== 'Owner') {
-            return response()->json(['message' => 'Hanya boleh ada satu Owner dalam sistem.'], 403);
-        }
     }
 
     // Menghapus user
