@@ -1,17 +1,18 @@
+import { useState } from "react";
 import OwnerSidebar from "../components/owner/OwnerSidebar";
 import OwnerHeader from "../components/owner/OwnerHeader";
 import { Outlet } from "react-router-dom";
 
 export default function OwnerLayout() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
-    <div className="bg-gray-100 min-h-screen flex">
-      <div className="flex flex-row flex-1 bg-[#181818]">
-        <OwnerSidebar />
-        <div className="flex-1 flex flex-col">
-          <OwnerHeader />
-          <div className="flex-1 p-4">
-            <Outlet />
-          </div>
+    <div className="min-h-screen flex bg-[#181818]">
+      <OwnerSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="flex flex-col flex-1 min-w-0">
+        <OwnerHeader onMenuClick={() => setSidebarOpen(true)} />
+        <div className="flex-1 p-3 sm:p-4">
+          <Outlet />
         </div>
       </div>
     </div>
